@@ -12,5 +12,5 @@
  *
  *= require_tree .
  *= require_self
- *= require bootstrap-sass-official/assets/stylesheets/bootstrap.css
+ *= require bootstrap/dist/css/bootstrap.css
  */
