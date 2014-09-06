@@ -45,7 +45,7 @@ group :development, :test do
   # Use SCSS for stylesheets
   gem 'sass-rails'
   # Use CoffeeScript for .js.coffee assets and views
-  gem 'coffee-rails'
+  # gem 'coffee-rails'
 end
 
 group :production do
