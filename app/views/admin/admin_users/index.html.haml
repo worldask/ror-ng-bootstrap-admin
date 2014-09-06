@@ -1,8 +1,8 @@
-%div{"ng-app" => "r1314"}
-  .panel.panel-success
-    .panel-heading
-      %h1{"ng-if" => "name"} Hello, {{name}}
-    .panel-body
-      %form.form-inline
-        .form-group
-          %input.form-control{:type => "text", :placeholder => "Enter your name",  :autofocus => true, "ng-model" => "name"}
+.panel.panel-success
+  .panel-heading
+    %h1{"ng-if" => "name"} Hello, {{name}}
+    = ::Rails.application.config.app_admin_name
+  .panel-body
+    %form.form-inline
+      .form-group
+        %input.form-control{:type => "text", :placeholder => "Enter your name",  :autofocus => true, "ng-model" => "name"}
