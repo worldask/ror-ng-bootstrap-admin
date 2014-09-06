@@ -24,5 +24,7 @@ module Ror1314
         g.assets false
         g.helper false
     end
+
+    config.assets.paths << Rails.root.join("vendor","assets","bower_components")
   end
 end
