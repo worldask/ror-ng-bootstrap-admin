@@ -1,5 +1,8 @@
-!!! 5
-%html
-  %head
-  %body
-    %div hello world
+%div{"ng-app" => "r1314"}
+  .panel.panel-success
+    .panel-heading
+      %h1{"ng-if" => "name"} Hello, {{name}}
+    .panel-body
+      %form.form-inline
+        .form-group
+          %input.form-control{:type => "text", :placeholder => "Enter your name",  :autofocus => true, "ng-model" => "name"}
