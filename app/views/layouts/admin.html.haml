@@ -9,5 +9,36 @@
     = javascript_include_tag 'application'
     = csrf_meta_tags
   %body{"ng-app" => "app"}
+    #layout_container
+      %header#head.row
+        .pull-left
+          %h1
+            = ::Rails.application.config.app_admin_name
+        #userinfo.pull-right
+          %ul.nav.navbar-nav.navbar-right
+            %li.dropdown
+              %a.dropdown-toggle{:href => "#" , "data-toggle" => "dropdown"}
+                %i.fa.fa-coffee
+                  欢迎，
+                %span.caret
+              %ul.dropdown-menu{:role => "menu"}
+                %li
+                  %a{:href => "user_change_password"}
+                    %i.fa.fa-lock
+                    修改密码
+                %li.divider
+                %li
+                  %a{:href => "signout"}
+                    %i.fa.fa-sign-out
+                    退出系统
+      .row
+        .col-md-2
+          = render :file => "layouts/menu"
+        .col-md-10
+          #content_for_layout
+            = yield
 
-    = yield
+    %foter.text-center
+      %h4
+        = ::Rails.application.config.owner
+        版权所有

@@ -1,0 +1,7 @@
+%a.list-group-item{:href => "#group_1", "data-parent" => "#menu_bar", "data-toggle" => "collapse"} 会员管理
+%a.list-group-item{:href => "#group_4", "data-parent" => "#menu_bar", "data-toggle" => "collapse"} 系统设置
+.panel-collapse.collapse.in#group_4
+  .list-group
+    %a.list-group-item{:href => "javascript:;"} 基本信息设置
+    %a.list-group-item{:href => "user", :controller => "user"} 帐号管理
+    %a.list-group-item{:href => "log", :controller => "log"} 系统日志
