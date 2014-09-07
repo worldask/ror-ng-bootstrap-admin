@@ -1,4 +1,11 @@
 asset 'angular'
 asset 'bootstrap'
+asset "font-awesome"
+asset "noty"
+#asset "angular-bootstrap-nav-tree"
+asset "modernizr"
+asset "spinjs"
+asset "iOS-Overlay"
+asset "bootstrap-datepicker-n9"
 # vim: ft=ruby
 
