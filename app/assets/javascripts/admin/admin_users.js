@@ -1,5 +1,5 @@
-// 用户管理
-app.controller('UsersController', ['$scope', '$http', function($scope, $http) {
+// 后台用户管理
+app.controller('Admin::AdminUsersController', ['$scope', '$http', function($scope, $http) {
   $scope.editMenu = function(item) {
     $(":checkbox[id^='treeCheckbox']").each(function(i) {
       $(this)[0].checked = false;

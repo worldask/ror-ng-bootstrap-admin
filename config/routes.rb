@@ -16,19 +16,19 @@ Rails.application.routes.draw do
 
     get '/modules/tree' => 'admin_modules#tree'
 
-    concern :search do
-      get 'search', on: :collection
-    end
-    concern :bulk_delete do
-      delete 'list', on: :collection
-    end
-    concern :is_unique do
+    concern :list do
       get 'list', on: :collection
     end
+    concern :bulk_delete do
+      delete 'bulk_delete', on: :collection
+    end
+    concern :is_unique do
+      get 'is_unique', on: :collection
+    end
 
-    resources :users, :controller => 'admin_users', concerns: [:search, :bulk_delete, :is_unique]
-    resources :depts, :controller => 'admin_depts', concerns: [:search, :bulk_delete, :is_unique]
-    resources :roles, :controller => 'admin_roles', concerns: [:search, :bulk_delete, :is_unique]
+    resources :users, :controller => 'admin_users', concerns: [:list, :bulk_delete, :is_unique]
+    resources :depts, :controller => 'admin_depts', concerns: [:list, :bulk_delete, :is_unique]
+    resources :roles, :controller => 'admin_roles', concerns: [:list, :bulk_delete, :is_unique]
   end
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

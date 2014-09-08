@@ -28,7 +28,6 @@ app.controller('BaseListController', ['$scope', '$compile', '$element', 'BaseCon
     // 列表
     $scope.list = response.list;
     $scope.selection = {};
-    $scope.batchDeleteDisabled.value = true;
 
     // 搜索条件
     $scope.searchCondition = response.search_condition;
@@ -237,36 +236,6 @@ app.controller('BaseListController', ['$scope', '$compile', '$element', 'BaseCon
       }
     });
   };
-
-  $scope.importExcel = function() {
-    $("#import-excel").click();
-  };
-
-  $("#import-excel").change(function() {
-    Util.showIosNotify('请稍候...');
-    var formData = new FormData();
-    formData.append("file", $("#import-excel")[0].files[0]);
-
-    $.ajax({
-      type: 'POST',
-      url: Util.getController() + '/import_excel?_token=' + $("input[name='_token']").val(),
-      data: formData,
-      dataType: 'text',
-      processData: false,
-      contentType: false,
-      mimeType: "multipart/form-data",
-
-      success: function(response) {
-        Util.hideIosNotify();
-        Util.notify(response.desc);
-      },
-      error: function(response) {
-        Util.hideIosNotify();
-        Util.notify('导入失败，请检查Excel文件', 'error');
-      },
-      dataType: 'json'
-    });
-  });
 }]);
 
 // 数字转百分号

@@ -1,5 +1,5 @@
 %div{"ng-controller" => "BaseListController"}
-  %div{"ng-controller" => "UsersController"}
+  %div{"ng-controller" => "#{params[:controller].camelize}Controller"}
     #panel-list
       .panel.panel-default
         .panel-heading
@@ -12,7 +12,7 @@
             %a#btnBatchDelete.btn.btn-danger{:title => "批量删除", "ng-click" => "batchDelete(selection);"}
               %i.fa.fa-trash-o
           .col-lg-4.input-group.pull-right
-            %input.form-control{:type => "text", "ng-model" => "keyword", :name => "q", :placeholder => "请输入搜索关键字"}
+            %input.form-control{:type => "text", :name => "q", :placeholder => "请输入搜索关键字", "ng-model" => "keyword"}
             %span.input-group-btn
               %a.btn.btn-primary{:title => "搜索", "ng-click" => "search(keyword);"}
                 %i.fa.fa-search
@@ -21,15 +21,15 @@
           %thead
             %tr
               %th.text-center
-                %input#controllerName{:type => "hidden", :value => "@{{controller}}"}
-                %input#primaryKey{:type => "hidden", :value => "@{{primaryKey}}"}
+                %input#controllerName{:type => "hidden", :value => "{{controller}}"}
+                %input#primaryKey{:type => "hidden", :value => "{{primaryKey}}"}
                 %input{:type => "checkbox"}
               %th.text-center 名称
               %th.text-center 操作
           %tbody#list
             %tr{"ng-repeat" => "item in list.data"}
               %td{:width => "2%"}
-                %input{:type => "hidden", :value => "@{{item.id}}"}
+                %input{:type => "hidden", :value => "{{item.id}}"}
                 %input{:type => "checkbox", "ng-model" => "item.$$checked", "ng-change" => "onSelect(item)"}
               %td{"ng-bind" => "item.username"}
               %td.text-center
@@ -53,7 +53,7 @@
             %i.fa.fa-edit.fa-lg{"ng-bind" => "title"}
 
         .panel-body
-          %input#hidePrimaryKeyID{:type => "hidden", :value => "@{{itemModel.id}}"}
+          %input#hidePrimaryKeyID{:type => "hidden", :value => "{{itemModel.id}}"}
           %form#editForm.form-horizontal
             .form-group
               %label.col-md-2.control-label{:for => "username"} 名称

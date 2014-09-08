@@ -4,7 +4,7 @@
 var Util = (function() {
   // 从地址栏获取controller参数
   var getController = function() {
-    var result = location.pathname.split('/')[1];
+    var result = location.pathname.split('/')[2];
     if (result === undefined) {
       result = "";
     } 
@@ -14,7 +14,7 @@ var Util = (function() {
 
   // 从地址栏获取action参数
   var getMethod = function() {
-    var result = location.pathname.split('/')[2];
+    var result = location.pathname.split('/')[3];
     if (result === undefined) {
       result = "";
     } 
