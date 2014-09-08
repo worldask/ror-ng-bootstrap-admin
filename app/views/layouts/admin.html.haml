@@ -4,41 +4,52 @@
     %meta{:charset => "utf-8"}
     %title 
       = ::Rails.application.config.app_admin_name
-    %meta{:content => "width=device-width, initial-scale=1,user-scalable=no", :name => "viewport"}
-    = stylesheet_link_tag 'application', media: 'all'
-    = javascript_include_tag 'application'
+    %meta{:content => "width=device-width, initial-scale=1, user-scalable=no", :name => "viewport"}
+    = stylesheet_link_tag 'admin/application', media: 'all'
     = csrf_meta_tags
   %body{"ng-app" => "app"}
     #layout_container
+      -# 头部
       %header#head.row
         .pull-left
-          %h1
+          %h1<
             = ::Rails.application.config.app_admin_name
         #userinfo.pull-right
           %ul.nav.navbar-nav.navbar-right
             %li.dropdown
               %a.dropdown-toggle{:href => "#" , "data-toggle" => "dropdown"}
-                %i.fa.fa-coffee
+                %i.fa.fa-coffee<
                   欢迎，
                 %span.caret
               %ul.dropdown-menu{:role => "menu"}
                 %li
-                  %a{:href => "user_change_password"}
-                    %i.fa.fa-lock
+                  %a{:href => "user_change_password"}<
+                    %i.fa.fa-lock><
                     修改密码
                 %li.divider
                 %li
-                  %a{:href => "signout"}
-                    %i.fa.fa-sign-out
+                  %a{:href => "signout"}<
+                    %i.fa.fa-sign-out><
                     退出系统
       .row
+        -# 左侧菜单
         .col-md-2
           = render :file => "layouts/menu"
+        -# 主界面
         .col-md-10
           #content_for_layout
             = yield
 
-    %foter.text-center
-      %h4
+    %footer.text-center<
+      %h4<
         = ::Rails.application.config.owner
         版权所有
+
+    -# load scripts
+    = javascript_include_tag 'admin/application'
+    - if params[:action] == 'tree'
+      = javascript_include_tag 'admin/base_tree'
+    - else params[:action] == 'index' 
+      = javascript_include_tag 'admin/base_list'
+    = javascript_include_tag "#{params[:controller]}" if ::Rails.application.assets.find_asset("#{params[:controller]}.js")
+    = yield :scripts
