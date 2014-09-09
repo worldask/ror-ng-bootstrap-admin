@@ -4,7 +4,7 @@
       .panel.panel-default
         .panel-heading
           %h4
-            %i.fa.fa-list.fa-lg{"ng-bind" => "title"}
+            %i.fa.fa-list.fa-lg{"ng-bind" => "' ' + title"}
         .panel-body
           .col-lg-8.input-group.pull-left
             %a.btn.btn-success{:title => "添加", "ng-click" => "edit({});"}

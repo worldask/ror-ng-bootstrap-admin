@@ -3,7 +3,7 @@ class Admin::AdminUsersController < Admin::AdminController
   end
 
   def list 
-    data = {:title => ' 用户管理'}
+    data = {:title => '用户管理'}
     data[:list] = {:data => AdminUser.list}
 
     render json: data
