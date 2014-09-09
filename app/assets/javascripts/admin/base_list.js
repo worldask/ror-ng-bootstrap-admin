@@ -90,18 +90,14 @@ app.controller('BaseListController', ['$scope', '$compile', '$element', 'BaseCon
 
   // 关闭编辑界面
   $scope.closeEdit = function() {
-    $("#panel-edit").toggleClass("in");
-    $("#panel-edit").slideUp(); 
-    $("#panel-list").slideDown(); 
+    $scope.show_list_edit = 'list';
   };
 
   //Esc键关闭编辑界面
   $(document).keydown(function(e) {
     if(e.keyCode == 27){
-      //但页面显示编辑界面时 按Esc关闭编辑界面
-      if($("#panel-list").is(":hidden")==true){
-        $scope.closeEdit();
-      }
+      // 按Esc关闭编辑界面
+      $scope.closeEdit();
     }
   });
 

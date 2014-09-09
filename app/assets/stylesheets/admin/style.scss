@@ -41,3 +41,14 @@ tfoot code {font-size: 14px;}
 #head #userinfo {margin-top:25px; padding-right:15px;}
 
 #menu_bar > a.list-group-item {background-color:#965b9f; color: #fff;}
+
+/* angular animate */
+.animate-switch.ng-animate {
+  -webkit-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 1s;
+  -moz-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 1s;
+  -o-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 1s;
+  transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 1s;
+  position:absolute; top:0; left: 15px; right: 15px; bottom:0;
+}
+.animate-switch.ng-leave.ng-leave-active, .animate-switch.ng-enter { top: 100px; opacity: 0;}
+.animate-switch.ng-leave, .animate-switch.ng-enter.ng-enter-active { top: 0; opacity: 1; }

@@ -1,4 +1,5 @@
 asset 'angular'
+asset 'angular-animate'
 asset 'bootstrap'
 asset "font-awesome"
 asset "noty"

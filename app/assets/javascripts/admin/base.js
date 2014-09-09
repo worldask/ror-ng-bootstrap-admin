@@ -1,7 +1,7 @@
 // emacs: -*- coding: utf-8; js-indent-level: 2; -*- vi: set ai ts=2 sw=2 sts=2 et:
 // angular基类
 
-var deps = []
+var deps = ['ngAnimate'];
 var app = angular.module('app', deps);
 
 app.service('BaseController', ['$http', '$compile', function($http, $compile) {
@@ -22,6 +22,7 @@ app.service('BaseController', ['$http', '$compile', function($http, $compile) {
   return { extend : function(scope, element) {
     scope.title = '';
     document.title = '';
+    scope.show_list_edit = 'list';
 
     scope.controller = '';
     scope.primaryKey = '';
@@ -133,13 +134,13 @@ app.service('BaseController', ['$http', '$compile', function($http, $compile) {
       scope.editingItem = item;
       scope.itemModel = angular.copy(item);
 
-      $("#panel-edit").toggleClass("dn");
-      $("#panel-edit").slideDown();
-      $("#panel-list").slideUp('normal', function () {
-        // 编辑框动画完成后，将焦点定位到第一个文本框并选中
-        $("#panel-edit :text").first().focus();
-        $("#panel-edit :text").first().select();
-      });
+      scope.show_list_edit = 'edit';
+      //$("#panel-edit").slideDown();
+      //$("#panel-list").slideUp('normal', function () {
+      //  // 编辑框动画完成后，将焦点定位到第一个文本框并选中
+      //  $("#panel-edit :text").first().focus();
+      //  $("#panel-edit :text").first().select();
+      //});
 
       // 回车保存
       $("#panel-edit .form-control").off('keydown');
@@ -148,11 +149,11 @@ app.service('BaseController', ['$http', '$compile', function($http, $compile) {
           scope.save();
         }
       });
-      if (item[scope.primaryKey]) {
-        scope.form_data._method = 'edit';
-      } else {
-        scope.form_data._method = 'create';
-      }
+      //if (item[scope.primaryKey]) {
+      //  scope.form_data._method = 'edit';
+      //} else {
+      //  scope.form_data._method = 'create';
+      //}
     };
 
     scope.uniqueCount = 0;
@@ -286,7 +287,8 @@ app.service('BaseController', ['$http', '$compile', function($http, $compile) {
       var _token = $("input[name='_token']").val();
       data['_token'] = _token;
 
-      scope.write(Util.getController(), scope.form_data._method, data, item);
+      //scope.write(Util.getController(), scope.form_data._method, data, item);
+      scope.write(Util.getController(), '', data, item);
     };
 
     // 保存
