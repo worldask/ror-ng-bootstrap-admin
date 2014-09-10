@@ -1,9 +1,9 @@
 asset 'angular', '1.3.0-beta.19'
 asset 'angular-animate', '1.3.0-beta.19'
 asset 'bootstrap'
-asset "font-awesome"
+# asset "font-awesome"
 asset "noty"
-#asset "angular-bootstrap-nav-tree"
+# asset "angular-bootstrap-nav-tree"
 asset "modernizr"
 asset "spinjs"
 asset "iOS-Overlay"

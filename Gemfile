@@ -7,6 +7,7 @@ ruby '2.1.0'
 gem 'rails'
 gem 'haml-rails'
 gem 'bower-rails'
+gem "font-awesome-rails"
 
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
 # gem 'turbolinks'
@@ -50,7 +51,8 @@ end
 
 group :production do
   # gem 'mysql2'
-  gem 'pg'
+  gem 'sqlite3'
+  # gem 'pg'
 end
 
 group :doc do
