@@ -3,6 +3,6 @@ class Admin::AdminController < ApplicationController
 
   protected
   def choose_layout
-    'admin'
+    'admin/application'
   end
 end
