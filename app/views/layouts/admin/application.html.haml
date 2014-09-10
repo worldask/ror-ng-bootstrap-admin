@@ -9,28 +9,7 @@
     = csrf_meta_tags
   %body{"ng-app" => "app"}
     #layout_container
-      -# 头部
-      %header#head.row
-        .pull-left
-          %h1<
-            = ::Rails.application.config.app_admin_name
-        #userinfo.pull-right
-          %ul.nav.navbar-nav.navbar-right
-            %li.dropdown
-              %a.dropdown-toggle{:href => "#" , "data-toggle" => "dropdown"}
-                %i.fa.fa-coffee<
-                  &nbsp;欢迎，
-                %span.caret
-              %ul.dropdown-menu{:role => "menu"}
-                %li
-                  %a{:href => "user_change_password"}<
-                    %i.fa.fa-lock><
-                    修改密码
-                %li.divider
-                %li
-                  %a{:href => "signout"}<
-                    %i.fa.fa-sign-out><
-                    退出系统
+      = render :file => "layouts/admin/head"
       .row
         -# 左侧菜单
         .col-md-2
