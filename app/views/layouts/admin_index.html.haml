@@ -1,0 +1,56 @@
+%div{"ng-controller" => "BaseListController"}
+  %div{"ng-controller" => "#{params[:controller].camelize}Controller"}
+    %div{"ng-switch" => true, :on => "show_panel"}
+      #panel-list.animate-switch{"ng-switch-when" => "list"}
+        .panel.panel-default
+          .panel-heading
+            %h4
+              %i.fa.fa-list.fa-lg{"ng-bind" => "' ' + title"}
+          .panel-body
+            -# 工具栏
+            = yield :list_toolbar
+
+          %table.table.table-striped.table-hover.table-bordered{"ng-init" => "init()"}
+            %thead
+              %tr
+                %th.text-center
+                  %input#controllerName{:type => "hidden", :value => "{{controller}}"}
+                  %input#primaryKey{:type => "hidden", :value => "{{primaryKey}}"}
+                  %input{:type => "checkbox"}
+                -# 表头
+                = yield :list_thead
+                %th.text-center 操作
+            %tbody#list
+              %tr{"ng-repeat" => "item in list.data"}
+                %td{:width => "2%"}
+                  %input{:type => "hidden", :value => "{{item.id}}"}
+                  %input{:type => "checkbox", "ng-model" => "item.$$checked", "ng-change" => "onSelect(item)"}
+                -# 表体
+                = yield :list_tbody
+                %td.text-center
+                  -# 操作按钮
+                  = yield :list_buttons
+
+        .text-center{"ng-if" => "list.data.length == 0"}
+          %code 没有数据
+
+        #paging.panel-body{:compile => "htmlPaging"}
+
+      #panel-edit.animate-switch{"ng-switch-when" => "edit"}
+        .panel.panel-primary
+          .modal-header.label-primary
+            %a.close{:title => "关闭", "ng-click" => "closeEdit();"} &times;
+            %h4
+              %i.fa.fa-edit.fa-lg{"ng-bind" => "' ' + title"}
+
+          .panel-body
+            %input#hidePrimaryKeyID{:type => "hidden", :value => "{{itemModel.id}}"}
+            %form#editForm.form-horizontal
+              -# 表单
+              = yield :edit_form_controls
+
+          .panel-footer.text-center
+            %a.btn.btn-primary.btn-save{:title => "保存", "ng-click" => "save()"}
+              %i.fa.fa-save.fa-lg
+            %a.btn.btn-default{:title => "关闭", "ng-click" => "closeEdit();"}
+              %i.fa.fa-times.fa-lg

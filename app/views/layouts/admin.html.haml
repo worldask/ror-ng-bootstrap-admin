@@ -34,11 +34,11 @@
       .row
         -# 左侧菜单
         .col-md-2
-          = render :file => "layouts/menu"
+          = render :file => "layouts/admin_menu"
         -# 主界面
         .col-md-10
           #content_for_layout
-            = yield
+            = render :file => "layouts/admin_index"
 
     %footer.text-center<
       %h4<
