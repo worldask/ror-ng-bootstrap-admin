@@ -10,9 +10,9 @@
  * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
  * file per style scope.
  *
- *= require bootstrap/dist/css/bootstrap.css
- *= require font-awesome/css/font-awesome.css
- *= require admin/style.css
+ *= require bootstrap/dist/css/bootstrap
+ *= require font-awesome/css/font-awesome
+ *= require admin/style
  * require_tree .
- * require_self
+ *= require_self
  */
