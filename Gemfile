@@ -8,7 +8,6 @@ gem 'rails'
 gem 'haml-rails'
 gem 'bower-rails'
 gem "font-awesome-rails"
-gem 'angular-rails-templates'
 
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
 # gem 'turbolinks'
