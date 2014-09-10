@@ -1,5 +1,6 @@
 asset 'angular', '1.3.0-beta.19'
 asset 'angular-animate', '1.3.0-beta.19'
+asset 'angular-route', '1.3.0-beta.19'
 asset 'bootstrap'
 # asset "font-awesome"
 asset "noty"
