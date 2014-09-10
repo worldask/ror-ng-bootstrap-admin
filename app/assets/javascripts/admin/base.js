@@ -22,7 +22,7 @@ app.service('BaseController', ['$http', '$compile', function($http, $compile) {
   return { extend : function(scope, element) {
     scope.title = '';
     document.title = '';
-    scope.show_list_edit = 'list';
+    scope.show_panel = 'list';
 
     scope.controller = '';
     scope.primaryKey = '';
@@ -134,13 +134,13 @@ app.service('BaseController', ['$http', '$compile', function($http, $compile) {
       scope.editingItem = item;
       scope.itemModel = angular.copy(item);
 
-      scope.show_list_edit = 'edit';
-      //$("#panel-edit").slideDown();
-      //$("#panel-list").slideUp('normal', function () {
+      scope.show_panel = 'edit';
+      //$animate.enter(element, parentElement).then(function() {
+      //  angular.element(element).find("input:text").first().focus();
+      //});
       //  // 编辑框动画完成后，将焦点定位到第一个文本框并选中
       //  $("#panel-edit :text").first().focus();
       //  $("#panel-edit :text").first().select();
-      //});
 
       // 回车保存
       $("#panel-edit .form-control").off('keydown');

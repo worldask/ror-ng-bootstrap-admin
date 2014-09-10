@@ -90,7 +90,7 @@ app.controller('BaseListController', ['$scope', '$compile', '$element', 'BaseCon
 
   // 关闭编辑界面
   $scope.closeEdit = function() {
-    $scope.show_list_edit = 'list';
+    $scope.show_panel = 'list';
   };
 
   //Esc键关闭编辑界面

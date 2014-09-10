@@ -1,6 +1,6 @@
 %div{"ng-controller" => "BaseListController"}
   %div{"ng-controller" => "#{params[:controller].camelize}Controller"}
-    %div{"ng-switch" => true, :on => "show_list_edit"}
+    %div{"ng-switch" => true, :on => "show_panel"}
       #panel-list.animate-switch{"ng-switch-when" => "list"}
         .panel.panel-default
           .panel-heading
