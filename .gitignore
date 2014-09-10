@@ -21,3 +21,6 @@ log/
 *.swp
 *.~
 *.sqlite3
+
+public/assets
+vendor/assets/bower_components
