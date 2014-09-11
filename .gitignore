@@ -22,5 +22,7 @@ log/
 *.~
 *.sqlite3
 
+app/assets/admin
+app/assets/fonts
 public/assets
 vendor/assets/bower_components
