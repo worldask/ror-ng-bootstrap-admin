@@ -61,8 +61,6 @@ GEM
       factory_girl (~> 4.4.0)
       railties (>= 3.0.0)
     ffi (1.9.3)
-    font-awesome-rails (4.2.0.0)
-      railties (>= 3.2, < 5.0)
     haml (4.0.5)
       tilt
     haml-rails (0.5.3)
@@ -197,7 +195,6 @@ DEPENDENCIES
   database_cleaner
   debugger
   factory_girl_rails
-  font-awesome-rails
   haml-rails
   jbuilder
   pry
