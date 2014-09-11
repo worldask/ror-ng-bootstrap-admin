@@ -27,5 +27,8 @@ module Ror1314
         g.assets false
         g.helper false
     end
+
+    # 禁用assets pipeline
+    config.assets.enabled = false 
   end
 end
