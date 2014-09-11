@@ -5,7 +5,8 @@
     %title 
       = ::Rails.application.config.app_admin_name
     %meta{:content => "width=device-width, initial-scale=1, user-scalable=no", :name => "viewport"}
-    = stylesheet_link_tag 'admin/application', media: 'all'
+    %link{:href => "/assets/admin/vendor.css", :media => "all", :rel => "stylesheet"}
+    %link{:href => "/assets/admin/app.css", :media => "all", :rel => "stylesheet"}
     = csrf_meta_tags
   %body{"ng-app" => "app"}
     #layout_container
@@ -26,10 +27,14 @@
         版权所有
 
     -# load scripts
-    = javascript_include_tag 'admin/application'
+    %script{:src => "/assets/admin/vendor.js"}
+    %script{:src => "/assets/admin/app.js"}
     - if params[:action] == 'tree'
-      = javascript_include_tag 'admin/base_tree'
+      -# = javascript_include_tag 'admin/base_tree'
+      %script{:src => "/assets/admin/base_tree.js"}
     - else params[:action] == 'index' 
-      = javascript_include_tag 'admin/base_list'
-    = javascript_include_tag "#{params[:controller]}" if ::Rails.application.assets.find_asset("#{params[:controller]}.js")
+      -# = javascript_include_tag 'admin/base_list'
+      %script{:src => "/assets/admin/base_list.js"}
+    -# = javascript_include_tag "#{params[:controller]}" if ::Rails.application.assets.find_asset("#{params[:controller]}.js")
+    %script{:src => "/assets/#{params[:controller]}.js"}
     = yield :scripts
