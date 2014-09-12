@@ -1,0 +1,35 @@
+- content_for :list_toolbar do
+  .col-lg-8.input-group.pull-left
+    %a.btn.btn-success{:title => "添加", "ng-click" => "edit({});"}
+      %i.fa.fa-plus
+    %a#btnBatchDelete.btn.btn-danger{:title => "批量删除", "ng-click" => "batchDelete(selection);"}
+      %i.fa.fa-trash-o
+  .col-lg-4.input-group.pull-right
+    %input.form-control{:type => "text", :name => "q", :placeholder => "请输入搜索关键字", "ng-model" => "keyword"}
+    %span.input-group-btn
+      %a.btn.btn-primary{:title => "搜索", "ng-click" => "search(keyword);"}
+        %i.fa.fa-search
+
+- content_for :list_thead do
+  %th.text-center 名称
+  
+- content_for :list_tbody do
+  %td{"ng-bind" => "item.name"}
+
+- content_for :list_buttons do
+  %a.btn.btn-sm.btn-primary{:title => "授权", "ng-click" => "editMenu(item);"}
+    %i.fa.fa-user.fa-lg
+  %a.btn.btn-sm.btn-primary{:title => "编辑", "ng-click" => "edit(item);"}
+    %i.fa.fa-edit.fa-lg
+  %a.btn.btn-sm.btn-primary{:title => "删除", "ng-click" => "delConfirm(item);"}
+    %i.fa.fa-trash-o.fa-lg
+
+- content_for :edit_form_controls do
+  .form-group
+    %label.col-md-2.control-label{:for => "username"} 名称
+    .col-md-10
+      %input#username.form-control{"ng-model" => "itemModel.username", :type => "text", :placeholder => "名称", :maxlength => "20", :required => "true"}
+  .form-group
+    %label.col-md-2.control-label{:for => "passowrd"} 密码 
+    .col-md-10
+      %input#password.form-control{"ng-model" => "itemModel.password", :type => "password", :placeholder => "密码", :maxlength => "20", :required => true}
