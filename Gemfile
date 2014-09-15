@@ -1,7 +1,7 @@
 source 'http://ruby.taobao.org/'
 #source 'https://rails-assets.org'
 
-ruby '2.1.0'
+ruby '2.1.2'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails'
@@ -39,7 +39,8 @@ group :development, :test do
   gem 'capybara'
   gem 'database_cleaner'
   gem 'pry'
-  gem 'debugger'
+  # gem 'debugger'
+  gem 'byebug'
   # Use Uglifier as compressor for JavaScript assets
   gem 'uglifier'
   # Use SCSS for stylesheets
