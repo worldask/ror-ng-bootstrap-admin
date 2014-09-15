@@ -28,11 +28,19 @@ gulp.task('clean', function(cb) {
 
 gulp.task('vendor_js', function () {
   var files = [
-    'vendor/assets/bower_components/jquery/dist/jquery.min.js',
     'vendor/assets/bower_components/angular/angular.min.js',
     'vendor/assets/bower_components/angular-animate/angular-animate.min.js',
     'vendor/assets/bower_components/angular-route/angular-route.min.js',
+    'vendor/assets/bower_components/jquery/dist/jquery.min.js',
     'vendor/assets/bower_components/bootstrap/dist/js/bootstrap.min.js',
+    'vendor/assets/bower_components/bootstrap-datepicker-n9/js/bootstrap-datepicker.js',
+    'vendor/assets/bower_components/bootstrap-datepicker-n9/js/locales/bootstrap-datepicker.zh-CN.js',
+    'vendor/assets/bower_components/angular-bootstrap-nav-tree/dist/abn_tree_directive.js',
+    'vendor/assets/bower_components/spinjs/spin.js',
+    'vendor/assets/bower_components/iOS-Overlay/js/iosOverlay.js',
+    'vendor/assets/bower_components/noty/js/noty/jquery.noty.js',
+    'vendor/assets/bower_components/noty/js/noty/layouts/bottomRight.js',
+    'vendor/assets/bower_components/noty/js/noty/themes/default.js',
   ];
 
   return gulp.src(files)
@@ -44,8 +52,11 @@ gulp.task('vendor_js', function () {
 
 gulp.task('vendor_css', function () {
   var files = [
-    'vendor/assets/bower_components/bootstrap/dist/css/bootstrap.min.css',
     'vendor/assets/bower_components/font-awesome/css/font-awesome.min.css',
+    'vendor/assets/bower_components/bootstrap/dist/css/bootstrap.min.css',
+    'vendor/assets/bower_components/bootstrap-datepicker-n9/css/datepicker3.css',
+    'vendor/assets/bower_components/angular-bootstrap-nav-tree/dist/abn_tree.css',
+    'vendor/assets/bower_components/iOS-Overlay/css/iosOverlay.css',
   ];
 
   return gulp.src(files)
