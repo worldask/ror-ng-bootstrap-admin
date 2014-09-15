@@ -83,19 +83,22 @@ app.service('BaseController', ['$http', '$compile', function($http, $compile) {
       var success = {};
       var method = '';
 
+      data['authenticity_token'] = $("meta[name='csrf-token']").attr('content');
+
       switch (_m) {
         case 'create':
           url = c;
           method = 'POST';
           success = function(response, status) {
-            if (response['code'] == -1) {
-              _notify(response['desc'], 'error');
-            } else {
-              // 新增则将返回的主键值更新到item
+            if (response.code === 1) {
+              // 将返回的主键更新到item
               item[scope.primaryKey] = response[scope.primaryKey];
+
               scope.$broadcast('afterItemCreated', item);
-              _notify('添加成功');
-              $("#panel-edit").modal('hide');
+              _notify(response.desc);
+              scope.show_panel = 'list';
+            } else {
+              _notify(response.desc, 'error');
             }
           };
           break;
@@ -105,9 +108,13 @@ app.service('BaseController', ['$http', '$compile', function($http, $compile) {
         // 主键必须放在外层
         data[scope.primaryKey] = item[scope.primaryKey];
         success = function(response, status) {
-          scope.$broadcast('afterItemUpdated', item);
-          _notify('更新成功');
-          $("#panel-edit").modal('hide');
+          if (response.code === 1) {
+            scope.$broadcast('afterItemUpdated', item);
+            _notify(response.desc);
+            scope.show_panel = 'list';
+          } else {
+            _notify(response.desc, 'error');
+          }
         };
         break;
       case 'destroy':
@@ -116,12 +123,15 @@ app.service('BaseController', ['$http', '$compile', function($http, $compile) {
         // 主键必须放在外层
         data[scope.primaryKey] = item[scope.primaryKey];
         success = function(response, status) {
-          if (response.code == "0") {
-            scope.$broadcast('afterItemDeleted', item);
-            _notify('删除成功');
-            $("#panel-edit").modal('hide');
-          } else {
+          if (response.code === 1) {
+            // 删除对应项，并重新索引数组
+            index = scope.list.data.indexOf(item);
+            scope.list.data.splice(index, 1);
+
+            scope.show_panel = 'list';
             _notify(response.desc);
+          } else {
+            _notify(response.desc, 'error');
           }
         }
         break;
@@ -302,11 +312,11 @@ app.service('BaseController', ['$http', '$compile', function($http, $compile) {
         }
       }
 
-      var _token = $("input[name='_token']").val();
-      data['_token'] = _token;
-
-      //scope.write(Util.getController(), scope.form_data._method, data, item);
-      scope.write(Util.getController(), '', data, item);
+      if (item[scope.primaryKey]) {
+        scope.write(Util.getController(), 'edit', data, item);
+      } else {
+        scope.write(Util.getController(), 'create', data, item);
+      }
     };
 
     // 保存
@@ -463,7 +473,7 @@ app.service('BaseController', ['$http', '$compile', function($http, $compile) {
         scope.batchDeleteDisabled.value = true;
         scope.$broadcast('afterBatchDelete', {});
       } else {
-        var data = []; 
+        var data = {}; 
         data[scope.primaryKey] = scope.itemDel[scope.primaryKey];
         scope.write(Util.getController(), 'destroy', data, scope.itemDel);
       }

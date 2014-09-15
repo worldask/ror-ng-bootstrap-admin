@@ -1,5 +1,5 @@
 %div{"ng-controller" => "BaseListController"}
-  %div{"ng-controller" => "#{params[:controller].camelize}Controller"}
+  %div{"ng-controller" => "#{params[:controller].camelize}Controller", "ng-init" => "init()"}
     %div{"ng-switch" => true, :on => "show_panel"}
       #panel-list.animate-switch{"ng-switch-when" => "list"}
         .panel.panel-default
@@ -10,7 +10,7 @@
             -# 工具栏
             = yield :list_toolbar
 
-          %table.table.table-striped.table-hover.table-bordered{"ng-init" => "init()"}
+          %table.table.table-striped.table-hover.table-bordered
             %thead
               %tr
                 %th.text-center

@@ -52,7 +52,7 @@ app.controller('BaseListController', ['$scope', '$compile', '$element', 'BaseCon
     }
     // 更新关联字段
     if (!angular.isUndefined($scope.relation) && $scope.flagAfterItemCreated) {
-      $scope.init();
+      //$scope.init();
     }
   });
   // 成功后通过回调关闭编辑界面
@@ -68,7 +68,7 @@ app.controller('BaseListController', ['$scope', '$compile', '$element', 'BaseCon
     
     // 更新关联字段
     if (!angular.isUndefined($scope.relation) && $scope.flagAfterItemUpdated) {
-      $scope.init();
+      //$scope.init();
     }
   });
   // 更新成功后通过回调关闭编辑界面
@@ -78,9 +78,6 @@ app.controller('BaseListController', ['$scope', '$compile', '$element', 'BaseCon
 
   // 已删除
   $scope.$on('afterItemDeleted', function(event, item) {
-    // 删除则从数组中删除对应项，并重新索引数组
-    index = $scope.list.data.indexOf(item);
-    $scope.list.data.splice(index, 1);
   });
   
   // 列表数据已读取
