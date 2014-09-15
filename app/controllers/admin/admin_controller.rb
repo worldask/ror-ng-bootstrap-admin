@@ -20,7 +20,7 @@ class Admin::AdminController < ApplicationController
     }
     @model.save
 
-    render json: {code: 1, desc: 'success', id: @model.id}
+    render json: {code: 1, desc: '保存成功！', id: @model.id}
     # search_field = this->search_field
     # AdminLog::write(Auth::user()->username, $this->title . '添加' . $this->search_field . '=' . $item->$search_field, Request::getClientIp(), date('Y-m-d H:i:s', time()));
   end
@@ -34,7 +34,7 @@ class Admin::AdminController < ApplicationController
     }
     @model.save
 
-    render json: {code: 1, desc: 'success'}
+    render json: {code: 1, desc: '保存成功！'}
     # $search_field = $this->search_field;
     # AdminLog::write(Auth::user()->username, $this->title . '编辑' . $this->search_field . '=' . $item->$search_field, Request::getClientIp(), date('Y-m-d H:i:s', time()));
   end
@@ -44,7 +44,7 @@ class Admin::AdminController < ApplicationController
     @model = model::find(params[:id])
     @model.destroy
 
-    render json: {code: 1, desc: 'success'}
+    render json: {code: 1, desc: '删除成功！'}
   end
 
   layout :choose_layout
