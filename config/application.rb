@@ -8,9 +8,9 @@ Bundler.require(*Rails.groups)
 
 module Ror1314
   class Application < Rails::Application
-    config.owner = '1314'
-    config.app_name = '一生一世'
-    config.app_admin_name = '一生一世运营管理系统'
+    config.owner = 'worldask'
+    config.app_name = 'Admin UI'
+    config.app_admin_name = 'Admin UI'
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
@@ -28,7 +28,7 @@ module Ror1314
         g.helper false
     end
 
-    # 禁用assets pipeline
+    # disable assets pipeline
     config.assets.enabled = false 
   end
 end
