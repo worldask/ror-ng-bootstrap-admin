@@ -60,7 +60,7 @@ gulp.task('vendor_css', function () {
   ];
 
   return gulp.src(files)
-  //.pipe(minify_css())
+  .pipe(minify_css())
   .pipe(concat('vendor.css'))
   .pipe(gulp.dest(paths.dest_admin_dev))
   .pipe(gulp.dest(paths.dest_admin));
@@ -104,7 +104,7 @@ gulp.task('css', ['clean', 'scss'], function () {
   .pipe(gulp.dest(paths.dest));
 });
 
-gulp.task('js_admin_app', ['clean'], function () {
+gulp.task('js_admin_app', function () {
   var files = [
     'app/assets/javascripts/admin/base.js',
     'app/assets/javascripts/admin/util.js'
@@ -120,7 +120,7 @@ gulp.task('js_admin_app', ['clean'], function () {
   .pipe(gulp.dest(paths.dest_admin));
 });
 
-gulp.task('js_admin', ['clean'], function () {
+gulp.task('js_admin', function () {
   var files = [paths.js_admin, 
     '!app/assets/javascripts/admin/base.js',
     '!app/assets/javascripts/admin/util.js'
@@ -149,7 +149,7 @@ gulp.task('css_admin', ['scss_admin'], function () {
 });
 
 gulp.task('watch', function() {
-  gulp.watch(paths.js_admin, ['js_admin']);
+  gulp.watch(paths.js_admin, ['js_admin', 'js_admin_app']);
   gulp.watch(paths.scss_admin, ['scss_admin']);
 });
 
