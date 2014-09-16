@@ -106,7 +106,7 @@ gulp.task('css', ['clean', 'scss'], function () {
 
 gulp.task('js_admin_app', function () {
   var files = [
-    'app/assets/javascripts/admin/route.js',
+    'app/assets/javascripts/admin/root.js',
     'app/assets/javascripts/admin/crud.js',
     'app/assets/javascripts/admin/util.js'
   ];
@@ -123,7 +123,7 @@ gulp.task('js_admin_app', function () {
 
 gulp.task('js_admin', function () {
   var files = [paths.js_admin, 
-    '!app/assets/javascripts/admin/route.js',
+    '!app/assets/javascripts/admin/root.js',
     '!app/assets/javascripts/admin/crud.js',
     '!app/assets/javascripts/admin/util.js'
   ];
