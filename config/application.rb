@@ -6,7 +6,7 @@ require 'rails/all'
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
-module Ror1314
+module APP
   class Application < Rails::Application
     config.owner = 'worldask'
     config.app_name = 'Admin UI'
