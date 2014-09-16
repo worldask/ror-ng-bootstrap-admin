@@ -1,56 +1,14 @@
-// emacs: -*- coding: utf-8; js-indent-level: 2; -*- vi: set ai ts=2 sw=2 sts=2 et:
-// angular基类
-
-var deps = ['ngAnimate', 'ngRoute'];
-var app = angular.module('app', deps);
-
-//app.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
-//  $routeProvider
-//  .when('/admin/users', {
-//    templateUrl: '/admin/users',
-//    controller: 'Admin::AdminUsersController',
-//    controllerAs: 'users'
-//  })
-//  .when('/admin/depts', {
-//    templateUrl: '/admin/depts',
-//    controller: 'Admin::AdminDeptsController',
-//    controllerAs: 'depts'
-//  });
-//
-//  // configure html5 to get links working on jsfiddle
-//  $locationProvider.html5Mode(true);
-//}]);
-
-
 app.service('BaseController', ['$http', '$compile', function($http, $compile) {
-
-  /*************************************************************************
-   * 私有成员
-   *************************************************************************/
-  // 选择的集合 {item.$$hashKey : item}
+  // checked rows in table {item.$$hashKey : item}
   var _selection = {};
-  var _notify = function(message, type) {
-    Util.notify(message, type);
-    Util.hideIosNotify(message, 'img/check.png');
-  };
 
-  /*************************************************************************
-   * 公有成员
-   *************************************************************************/
   return { extend : function(scope, element) {
-    scope.title = '';
     document.title = '';
+    scope.title = '';
     scope.show_panel = 'list';
-
-    scope.controller = '';
     scope.primaryKey = '';
 
-    // checkbox 选中/取消
-    scope.onSelect = function(item) {
-      scope.$broadcast('afterItemSelectChanged', item);
-    };
-
-    // 读数据
+    // read data from server
     scope.read = function(c, m, params) {
       if (!params) {
         params = '';
@@ -58,85 +16,78 @@ app.service('BaseController', ['$http', '$compile', function($http, $compile) {
 
       var p = $http({
         method: 'GET',
-          url: c + '/' + m + params,
+        url: c + '/' + m + params,
       });
       p.success(function(response){
-        // 标题
-        scope.title = response.title;
         document.title = response.title;
-        // 保存时要排除的字段及关联字段
+        scope.title = response.title;
+        // must exclude these fields when saving
         scope.relation = response.relation;
-
-        // 广播
         scope.$broadcast('afterRead', response);
       });
-
       p.error(function(response, status) {
-        //console.log(response);
         Util.notify('操作失败', 'error');
       });
     };
 
-    // 写数据
-    scope.write = function(c, _m, data, item) {
+    // write data to server
+    scope.write = function(c, m, data, item) {
       var url = '';
       var success = {};
       var method = '';
 
       data['authenticity_token'] = $("meta[name='csrf-token']").attr('content');
 
-      switch (_m) {
+      switch (m) {
         case 'create':
           url = c;
           method = 'POST';
           success = function(response, status) {
             if (response.code === 1) {
-              // 将返回的主键更新到item
+              // update primary key into new item
               item[scope.primaryKey] = response[scope.primaryKey];
 
               scope.$broadcast('afterItemCreated', item);
-              _notify(response.desc);
+              notify(response.desc);
               scope.show_panel = 'list';
             } else {
-              _notify(response.desc, 'error');
+              notify(response.desc, 'error');
             }
           };
           break;
       case 'edit':
         url = c + '/' + item[scope.primaryKey];
         method = 'PUT';
-        // 主键必须放在外层
         data[scope.primaryKey] = item[scope.primaryKey];
         success = function(response, status) {
           if (response.code === 1) {
             scope.$broadcast('afterItemUpdated', item);
-            _notify(response.desc);
+            notify(response.desc);
             scope.show_panel = 'list';
           } else {
-            _notify(response.desc, 'error');
+            notify(response.desc, 'error');
           }
         };
         break;
       case 'destroy':
         url = c + '/' + item[scope.primaryKey];
         method = 'DELETE';
-        // 主键必须放在外层
         data[scope.primaryKey] = item[scope.primaryKey];
         success = function(response, status) {
           if (response.code === 1) {
-            // 删除对应项，并重新索引数组
+            // remove item from list, and reindex the list
             index = scope.list.data.indexOf(item);
             scope.list.data.splice(index, 1);
 
             scope.show_panel = 'list';
-            _notify(response.desc);
+            notify(response.desc);
           } else {
-            _notify(response.desc, 'error');
+            notify(response.desc, 'error');
           }
         }
         break;
       default:
-        Util.hideIosNotify('未知操作', 'img/cross.png');
+        Util.notify('操作失败', 'error');
         return;
       }
 
@@ -150,11 +101,11 @@ app.service('BaseController', ['$http', '$compile', function($http, $compile) {
       p.success(success);
 
       p.error(function(response, status) {
-        Util.hideIosNotify('操作失败', 'img/cross.png');
+        Util.notify('操作失败', 'error');
       });
     };
 
-    // 显示编辑框
+    // show edit panel
     scope.edit = function(item) {
       $("#editForm .has-success").removeClass("has-success");
       $("#editForm .has-error").removeClass("has-error");
@@ -166,22 +117,17 @@ app.service('BaseController', ['$http', '$compile', function($http, $compile) {
       //$animate.enter(element, parentElement).then(function() {
       //  angular.element(element).find("input:text").first().focus();
       //});
-      //  // 编辑框动画完成后，将焦点定位到第一个文本框并选中
+      //  // after animating, focus to the first textbox and select all text
       //  $("#panel-edit :text").first().focus();
       //  $("#panel-edit :text").first().select();
 
-      // 回车保存
+      // save when press enter
       $("#panel-edit .form-control").off('keydown');
       $("#panel-edit .form-control").on('keydown', function(e){
         if (e.keyCode == 13){
           scope.save();
         }
       });
-      //if (item[scope.primaryKey]) {
-      //  scope.form_data._method = 'edit';
-      //} else {
-      //  scope.form_data._method = 'create';
-      //}
     };
 
     scope.uniqueCount = 0;
@@ -220,62 +166,6 @@ app.service('BaseController', ['$http', '$compile', function($http, $compile) {
         }
       });
     }
-
-    //scope.getDuplicateCount = function(params, formControl) {
-    //  var count = 0;
-
-    //  var p = $http({
-    //    method: 'GET',
-    //    url: Util.getController() + '/get_count' + params,
-    //  });
-
-    //  p.success(function(response) {
-    //    // 非 '0' 表示存在重复
-    //    if (response !== '0') {
-    //      formControl.parent().removeClass('has-success');
-    //      formControl.parent().addClass('has-error');
-    //      formControl.focus();
-    //      return;
-    //    } else {
-    //      formControl.parent().removeClass('has-error');
-    //      formControl.parent().addClass('has-success');
-    //      formControl.focus();
-    //    }
-
-    //    scope.uniqueCount -= 1;
-
-    //    if (scope.uniqueCount <= 0) {
-    //      Util.showIosNotify('请稍候...');
-    //      scope.saveCommit();
-    //    }
-    //  });
-    //};
-
-    scope.$on('del', function(event, data) {
-      if (data != undefined) {
-        scope.primaryKey = data.primaryKey;
-        scope.controller = data.controller;
-        scope.delConfirm(data.item);
-      }
-    });
-
-    scope.$on('save', function(event, data) {
-      if (data !== undefined) {
-        scope.primaryKey = data.primaryKey;
-        scope.controller = data.controller;
-        scope.itemModel = data.item;
-      }
-
-      scope.save();
-    });
-
-    scope.$on('edit', function(event, data) {
-      if (data !== undefined) {
-        scope.primaryKey = data.primaryKey;
-        scope.controller = data.controller;
-        scope.edit(data.item);
-      }
-    });
 
     scope.saveCommit = function() {
       // 移除表单校验时添加的样式
@@ -319,16 +209,15 @@ app.service('BaseController', ['$http', '$compile', function($http, $compile) {
       }
     };
 
-    // 保存
     scope.save = function() {
-      // 表单非空验证
-      if ((scope.validate != undefined)) {
+      // validate required fields
+      if (angular.isDefined(scope.validate)) {
         if (scope.validate() === false) {
           return;
         }
       }
 
-      // 验证是否唯一
+      // validate unique fields
       var controls = $("#editForm input[unique]");
       scope.uniqueCount = controls.length;
 
@@ -345,7 +234,6 @@ app.service('BaseController', ['$http', '$compile', function($http, $compile) {
       }
     };
 
-    // 表单验证
     scope.validate = function() {
       var result = true;
       var value = '';
@@ -387,7 +275,6 @@ app.service('BaseController', ['$http', '$compile', function($http, $compile) {
       return result;
     };
 
-    // 批量删除
     scope.$on('batchDelete', function(event, data) {
       if (data !== undefined) {
         scope.batchDelete(data.selection, data.controller, data.primaryKey);
@@ -459,9 +346,9 @@ app.service('BaseController', ['$http', '$compile', function($http, $compile) {
             for(var i = 0; i< scope.itemDel.length; i++) {
               scope.$broadcast('afterItemDeleted', scope.itemDel[i]);
             }
-            _notify('删除成功');
+            notify('删除成功');
           } else {
-            _notify(response.desc);
+            notify(response.desc);
           }
         })
         p.error(function(response, status) {
@@ -470,7 +357,6 @@ app.service('BaseController', ['$http', '$compile', function($http, $compile) {
 
         // 批量删除状态复位
         _selection = {};
-        scope.batchDeleteDisabled.value = true;
         scope.$broadcast('afterBatchDelete', {});
       } else {
         var data = {}; 
@@ -482,7 +368,6 @@ app.service('BaseController', ['$http', '$compile', function($http, $compile) {
     /**
      * batchUpdate 专属的 write (后期应考虑与 scope.write 整合)
      * @param {
-     *      controller : controller name
      *      method     : method name
      *      data       : http post data
      *      item       : item object
@@ -493,9 +378,9 @@ app.service('BaseController', ['$http', '$compile', function($http, $compile) {
     scope.writeForBatchUpdate = function(options) {
       var p = $http({
         method: 'POST',
-          url: options.controller + '/' + options.method,
-          headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-          data: options.data,
+        url: Util.controller + '/' + options.method,
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        data: options.data,
       });
 
       p.success(function(response, status){
@@ -545,7 +430,6 @@ app.service('BaseController', ['$http', '$compile', function($http, $compile) {
           index++;
 
           scope.writeForBatchUpdate({
-            controller  : scope.controller,
             method      : options.method,
             data        : scope.primaryKey + '=' + item[scope.primaryKey],
             item        : item,
@@ -561,3 +445,4 @@ app.service('BaseController', ['$http', '$compile', function($http, $compile) {
     }
   }};
 }]);
+

@@ -29,6 +29,7 @@
     -# load scripts
     %script{:src => "/assets/admin/vendor.js"}
     %script{:src => "/assets/admin/app.js"}
+    -# %script{:src => "/assets/admin/base.js"}
     - if params[:action] == 'tree'
       %script{:src => "/assets/admin/base_tree.js"}
     - else params[:action] == 'index' 

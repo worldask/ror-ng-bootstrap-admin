@@ -98,22 +98,14 @@ app.controller('BaseListController', ['$scope', '$compile', '$element', 'BaseCon
     }
   });
 
-  // item 选中状态变化
-  $scope.$on('afterItemSelectChanged', function(event, item) {
-    if (item.$$checked != undefined && item.$$checked == false) {
+  // checkbox 选中/取消
+  $scope.onSelect = function(item) {
+    if (angular.isDefined(item.$$checked) && item.$$checked === false) {
       delete $scope.selection[item.$$hashKey];
     } else {
       $scope.selection[item.$$hashKey] = item;
     }
-
-    var length = Object.getOwnPropertyNames($scope.selection).length;
-
-    if (length > 0) {
-      $scope.batchDeleteDisabled.value = false;
-    } else {
-      $scope.batchDeleteDisabled.value = true;
-    }
-  });
+  };
 
   // 搜索
   $scope.search = function(keyword) {
@@ -129,7 +121,7 @@ app.controller('BaseListController', ['$scope', '$compile', '$element', 'BaseCon
   $scope.gotoPage = function(page) {
     var params = '?page=' + page;
 
-    if ($scope.searchCondition !== undefined && $scope.searchCondition !== null && $scope.searchCondition !== '') {
+    if (angular.isDefined($scope.searchCondition) && $scope.searchCondition !== null && $scope.searchCondition !== '') {
       params += '&s={';
 
       var i = 0;
