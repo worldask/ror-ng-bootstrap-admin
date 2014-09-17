@@ -304,7 +304,6 @@ app.factory('crud', ['$http', '$compile', function($http, $compile) {
       // 删除确认
       scope.$on('delConfirm', function(event, data){
         if (data !== undefined) {
-          scope.controls = data.controller;
           scope.primaryKey = data.primaryKey;
           scope.delConfirm(data.item);
         }

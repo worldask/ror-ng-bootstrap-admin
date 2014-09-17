@@ -9,17 +9,8 @@ app.controller('BaseListController', ['$scope', '$compile', '$element', 'crud', 
   $scope.$on('afterRead', function(event, response) {
     $scope.flagAfterItemCreated = true;
     $scope.flagAfterItemUpdated = true;
-    $scope.flagAfterItemDeleted = true;
 
-    // 控制器，方法，主键
-    $scope.controller = response.controller;
-    if ($scope.controller == undefined) {
-      $scope.controller = Util.getController();
-    }
-    $scope.method = response.method;
-    if ($scope.method == undefined) {
-      $scope.method = Util.getMethod();
-    }
+    // 主键
     $scope.primaryKey = response.primaryKey;
     if ($scope.primaryKey == undefined) {
       $scope.primaryKey = 'id';
@@ -42,7 +33,6 @@ app.controller('BaseListController', ['$scope', '$compile', '$element', 'crud', 
     $scope.pageIndex = parseInt(response.list.current_page);
 
     $scope.paging();
-    $scope.$broadcast('afterListGenerated', response);
   });
 
   // 已添加
@@ -54,9 +44,6 @@ app.controller('BaseListController', ['$scope', '$compile', '$element', 'crud', 
     if (!angular.isUndefined($scope.relation) && $scope.flagAfterItemCreated) {
       //$scope.init();
     }
-  });
-  // 成功后通过回调关闭编辑界面
-  $scope.$on('afterItemCreated', function(event, data){
     $scope.closeEdit();
   });
 
@@ -70,9 +57,6 @@ app.controller('BaseListController', ['$scope', '$compile', '$element', 'crud', 
     if (!angular.isUndefined($scope.relation) && $scope.flagAfterItemUpdated) {
       //$scope.init();
     }
-  });
-  // 更新成功后通过回调关闭编辑界面
-  $scope.$on('afterItemUpdated', function(event, data){
     $scope.closeEdit();
   });
 
@@ -82,7 +66,7 @@ app.controller('BaseListController', ['$scope', '$compile', '$element', 'crud', 
   
   // 列表数据已读取
   $scope.$on('afterListGenerated', function(event, list) {
-    Util.initTableTribleCheckbox();
+    // Util.initTableTribleCheckbox();
   });
 
   // 关闭编辑界面
@@ -214,18 +198,11 @@ app.controller('BaseListController', ['$scope', '$compile', '$element', 'crud', 
 
     // 回车搜索
     $("#panel-list input[name=q]").off('keydown');
-    $("#panel-list input[name=q]").on('keydown', function(e){
-      if (e.keyCode == 13){
+    $("#panel-list input[name=q]").on('keydown', function(e) {
+      if (e.keyCode == 13) {
         $scope.search(this.value);
         this.select();
       }
     });
-  };
-}]);
-
-// 数字转百分号
-app.filter('percentage', ['$filter', function($filter) {
-  return function(input, decimals) {
-    return $filter('number')(input*100, decimals)+'%';
   };
 }]);
