@@ -29,12 +29,15 @@
     -# load scripts
     %script{:src => "/assets/admin/vendor.js"}
     %script{:src => "/assets/admin/app.js"}
-    -# %script{:src => "/assets/admin/base.js"}
     - if params[:action] == 'tree'
-      %script{:src => "/assets/admin/base_tree.js"}
+      %script{:src => "/assets/admin/tree.js"}
     - else params[:action] == 'index' 
-      %script{:src => "/assets/admin/base_list.js"}
+      %script{:src => "/assets/admin/list.js"}
 
     - if File.file?("./public/assets/#{params[:controller]}.js")
       %script{:src => "/assets/#{params[:controller]}.js"}
+    - else
+      - if params[:action] == 'index' 
+        %script
+          app.controller("#{params[:controller].camelize}Controller", ['$scope', '$element', 'list', function($scope, $element, list) {list.extend($scope, $element);}]);
     = yield :scripts
