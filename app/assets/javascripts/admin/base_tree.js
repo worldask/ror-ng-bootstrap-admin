@@ -1,14 +1,8 @@
-// 树控件基础类
-
-//deps.push.apply(deps, ['angularBootstrapNavTree', 'ngAnimate']);
+// 树控件基类
 deps.push.apply(deps, ['angularBootstrapNavTree']);
 
-app.controller('BaseTreeController', ['$scope', '$element', '$http', 'BaseController', function($scope, $element, $http, BaseController) {
-  BaseController.extend($scope, $element);
-
-  /*************************************************************************
-   * 私有成员
-   *************************************************************************/
+app.controller('BaseTreeController', ['$scope', '$element', '$http', 'crud', function($scope, $element, $http, crud) {
+  crud.extend($scope, $element);
 
   // 树节点搜索函数实现
   var _search = function(root, keyword) {

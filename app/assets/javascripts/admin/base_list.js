@@ -1,9 +1,9 @@
 // emacs: -*- coding: utf-8; js-indent-level: 2; -*- vi: set ai ts=2 sw=2 sts=2 et:
 // angular列表页基类
 
-app.controller('BaseListController', ['$scope', '$compile', '$element', 'BaseController', function($scope, $compile, $element, BaseController) {
+app.controller('BaseListController', ['$scope', '$compile', '$element', 'crud', function($scope, $compile, $element, crud) {
   $scope.selection = {};
-  BaseController.extend($scope, $element);
+  crud.extend($scope, $element);
 
   // read 返回结果
   $scope.$on('afterRead', function(event, response) {
