@@ -3,11 +3,11 @@
 app.factory('list', ['$compile', 'crud', function($compile, crud) {
   return {
     extend: function($scope, $element) {
-      $scope.selection = {};
       crud.extend($scope, $element);
+      $scope.selection = {};
 
       // after read
-      $scope.$on('afterRead', function(event, response) {
+      $scope.afterRead = function(response) {
         $scope.flagAfterItemCreated = true;
         $scope.flagAfterItemUpdated = true;
 
@@ -30,10 +30,10 @@ app.factory('list', ['$compile', 'crud', function($compile, crud) {
         $scope.pageIndex = parseInt(response.list.current_page);
 
         $scope.paging();
-      });
+      };
 
       // 已添加
-      $scope.$on('afterItemCreated', function(event, item) {
+      $scope.afterItemCreated = function(item) {
         if ($scope.list !== undefined) {
           $scope.list.data.unshift(item);
         }
@@ -42,10 +42,10 @@ app.factory('list', ['$compile', 'crud', function($compile, crud) {
           //$scope.init();
         }
         $scope.closeEdit();
-      });
+      };
 
       // 已更新
-      $scope.$on('afterItemUpdated', function(event, item) {
+      $scope.afterItemUpdated = function(item) {
         for(var key in $scope.itemModel) {
           $scope.editingItem[key] = $scope.itemModel[key];
         }
@@ -55,17 +55,12 @@ app.factory('list', ['$compile', 'crud', function($compile, crud) {
           //$scope.init();
         }
         $scope.closeEdit();
-      });
+      };
 
       // 已删除
-      $scope.$on('afterItemDeleted', function(event, item) {
-      });
+      $scope.afterItemDeleted = function(item) {
+      };
       
-      // 列表数据已读取
-      $scope.$on('afterListGenerated', function(event, list) {
-        // Util.initTableTribleCheckbox();
-      });
-
       // 关闭编辑界面
       $scope.closeEdit = function() {
         $scope.show_panel = 'list';
@@ -94,7 +89,6 @@ app.factory('list', ['$compile', 'crud', function($compile, crud) {
           keyword = '';
         }
 
-        //$scope.read(Util.getController(), 'list', '?keyword=' + keyword);
         $scope.read(Util.getController(), 'list', '?s={"keyword": "' + keyword + '"}');
       };
 
@@ -107,7 +101,6 @@ app.factory('list', ['$compile', 'crud', function($compile, crud) {
 
           var i = 0;
           for (key in $scope.searchCondition) {
-            //params += '&' + key + '=' + $scope.searchCondition[key];
             if (i > 0) {
               params += ', ';
             }

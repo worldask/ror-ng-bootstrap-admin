@@ -24,7 +24,10 @@ app.factory('crud', ['$http', '$compile', function($http, $compile) {
           scope.title = response.title;
           // must exclude these fields when saving
           scope.relation = response.relation;
-          scope.$broadcast('afterRead', response);
+          //scope.$broadcast('afterRead', response);
+          if (angular.isFunction(scope.afterRead)) {
+            scope.afterRead(response);
+          }
         });
         p.error(function(response, status) {
           Util.hideIosNotify();
@@ -45,16 +48,17 @@ app.factory('crud', ['$http', '$compile', function($http, $compile) {
             url = c;
             method = 'POST';
             success = function(response, status) {
+              Util.hideIosNotify();
               if (response.code === 1) {
                 // update primary key into new item
                 item[scope.primaryKey] = response[scope.primaryKey];
 
-                scope.$broadcast('afterItemCreated', item);
-                Util.hideIosNotify();
+                if (angular.isFunction(scope.afterItemCreated)) {
+                  scope.afterItemCreated(response);
+                }
                 Util.notify(response.desc);
                 scope.show_panel = 'list';
               } else {
-                Util.hideIosNotify();
                 Util.notify(response.desc, 'error');
               }
             };
@@ -64,13 +68,14 @@ app.factory('crud', ['$http', '$compile', function($http, $compile) {
           method = 'PUT';
           data[scope.primaryKey] = item[scope.primaryKey];
           success = function(response, status) {
+            Util.hideIosNotify();
             if (response.code === 1) {
-              scope.$broadcast('afterItemUpdated', item);
-              Util.hideIosNotify();
+              if (angular.isFunction(scope.afterItemUpdated)) {
+                scope.afterItemUpdated(response);
+              }
               Util.notify(response.desc);
               scope.show_panel = 'list';
             } else {
-              Util.hideIosNotify();
               Util.notify(response.desc, 'error');
             }
           };
@@ -80,16 +85,18 @@ app.factory('crud', ['$http', '$compile', function($http, $compile) {
           method = 'DELETE';
           data[scope.primaryKey] = item[scope.primaryKey];
           success = function(response, status) {
+            Util.hideIosNotify();
             if (response.code === 1) {
               // remove item from list, and reindex the list
               index = scope.list.data.indexOf(item);
               scope.list.data.splice(index, 1);
 
-              scope.show_panel = 'list';
-              Util.hideIosNotify();
+              if (angular.isFunction(scope.afterItemDeleted)) {
+                scope.afterItemDeleted(response);
+              }
               Util.notify(response.desc);
+              scope.show_panel = 'list';
             } else {
-              Util.hideIosNotify();
               Util.notify(response.desc, 'error');
             }
           }
@@ -108,7 +115,6 @@ app.factory('crud', ['$http', '$compile', function($http, $compile) {
         });
 
         p.success(success);
-
         p.error(function(response, status) {
           Util.hideIosNotify();
           Util.notify('操作失败', 'error');
@@ -353,7 +359,10 @@ app.factory('crud', ['$http', '$compile', function($http, $compile) {
           p.success(function(response){
             if (response.code == "0") {
               for(var i = 0; i< scope.itemDel.length; i++) {
-                scope.$broadcast('afterItemDeleted', scope.itemDel[i]);
+                //scope.$broadcast('afterItemDeleted', scope.itemDel[i]);
+                if (angular.isFunction(scope.afterItemDeleted)) {
+                  scope.afterItemDeleted(response);
+                }
               }
               notify('删除成功');
             } else {
