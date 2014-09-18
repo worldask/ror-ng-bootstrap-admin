@@ -1,4 +1,5 @@
 // emacs: -*- coding: utf-8; js-indent-level: 2; -*- vi: set ai ts=2 sw=2 sts=2 et:
+'use strict';
 // factory for list pages
 app.factory('list', ['$compile', 'crud', function($compile, crud) {
   return {
