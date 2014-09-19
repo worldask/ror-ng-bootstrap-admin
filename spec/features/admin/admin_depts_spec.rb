@@ -1,11 +1,11 @@
 # coding: utf-8
-require 'spec_helper'
+require 'rails_helper'
 
-describe AdminDept, :js => true do
+feature "Admin::AdminDepts", :type => :feature, :js => true do
   before(:all) do
     @depts = [
-      @tech = { :name => '技术部', :remark => 'Technical Dept' },
-      @oper = { :name => '运营部', :remark => 'Operation Dept' },
+      @tech = { :name => '技术部' },
+      @oper = { :name => '运营部' },
     ]
   end
 
