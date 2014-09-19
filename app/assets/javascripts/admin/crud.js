@@ -88,7 +88,7 @@ app.factory('crud', ['$http', '$compile', function($http, $compile) {
             Util.hideIosNotify();
             if (response.code === 1) {
               // remove item from list, and reindex the list
-              index = scope.list.data.indexOf(item);
+              var index = scope.list.data.indexOf(item);
               scope.list.data.splice(index, 1);
 
               if (angular.isFunction(scope.afterItemDeleted)) {

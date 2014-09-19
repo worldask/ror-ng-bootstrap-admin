@@ -38,27 +38,27 @@ feature "Admin::AdminDepts", :type => :feature, :js => true do
       end
     end
 
-    #describe '删除一个部门' do
-    #  it '记录条数应减1' do
-    #    all('a[title="删除"]').first.click
-    #    find('a[ng-click="del();"]').click
-    #    sleep 0.1
+    describe '删除一个部门' do
+      it '记录条数应减1' do
+        all('a[title="删除"]').first.click
+        find('a[ng-click="del();"]').click
+        sleep 0.1
 
-    #    #visit admin_depts_path
-    #    expect(page).to have_selector('table tbody tr', count: @depts.length - 1)
-    #  end
-    #end
+        #visit admin_depts_path
+        expect(page).to have_selector('table tbody tr', count: @depts.length - 1)
+      end
+    end
 
-    #describe '删除指定部门' do
-    #  it '删除之后该部门应不存在' do
-    #    find(:xpath, "//table/tbody/tr/td[text()='#{@tech[:name]}']/../td[@class='text-center']/a[@title='删除']").click
-    #    find('a[ng-click="del();"]').click
-    #    sleep 0.1
+    describe '删除指定部门' do
+      it '删除之后该部门应不存在' do
+        find(:xpath, "//table/tbody/tr/td[text()='#{@tech[:name]}']/../td[@class='text-center']/a[@title='删除']").click
+        find('a[ng-click="del();"]').click
+        sleep 0.1
 
-    #    #visit admin_depts_path
-    #    expect(page).to_not have_content @tech[:name]
-    #  end
-    #end
+        #visit admin_depts_path
+        expect(page).to_not have_content @tech[:name]
+      end
+    end
 
     #describe '修改部门' do
     #  it "部门名称应改变" do
