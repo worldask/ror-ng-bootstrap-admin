@@ -8,7 +8,7 @@ module ActiveRecordExtension
       order_by = 'id'
       order_seq = 'desc'
 
-      self.limit(2).offset(0).order(order_by => order_seq.to_sym)
+      self.limit(10).offset(0).order(order_by => order_seq.to_sym)
     end
   end
 end
