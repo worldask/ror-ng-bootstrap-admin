@@ -5,8 +5,20 @@ class Admin::AdminController < ApplicationController
   end
 
   def list 
+    model = controller_name.classify.constantize
+    page = params[:page] == nil ? 1 : params[:page]
+
     data = {:title => @@title}
-    data[:list] = {:data => controller_name.classify.constantize.list}
+    data[:list] = {:data => model.page(params[:page]).per(4)}
+
+    # pagination
+    count = model.count
+    data[:list][:count] = count
+    data[:list][:page] = page
+    data[:list][:per_page] = 4
+    data[:list][:last_page] = (count / 4.to_f).ceil
+    #data[:per_page] = Kaminari.config.default_per_page
+    #data[:page_count] = (count / Kaminari.config.default_per_page.to_f).ceil
 
     render json: data
   end

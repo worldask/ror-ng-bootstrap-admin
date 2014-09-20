@@ -7,6 +7,7 @@ ruby '2.1.2'
 gem 'rails'
 gem 'haml-rails'
 gem 'bower-rails'
+gem 'kaminari'
 
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
 # gem 'turbolinks'
