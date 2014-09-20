@@ -29,11 +29,9 @@ feature "Admin::AdminDepts", :type => :feature, :js => true do
       it '记录条数应加1' do
         find('a[title="添加"]').click
         find('input[id="name"]').set '新部门'
-        #find('input[id="remark"]').set 'New Dept'
         find('a[title="保存"]').click
         sleep 0.1
 
-        #visit admin_depts_path # 刷新页面，确保数据是从后端读取，以下同
         expect(page).to have_selector('table tbody tr', count: @depts.length + 1)
       end
     end
@@ -44,7 +42,6 @@ feature "Admin::AdminDepts", :type => :feature, :js => true do
         find('a[ng-click="del();"]').click
         sleep 0.1
 
-        #visit admin_depts_path
         expect(page).to have_selector('table tbody tr', count: @depts.length - 1)
       end
     end
@@ -55,39 +52,35 @@ feature "Admin::AdminDepts", :type => :feature, :js => true do
         find('a[ng-click="del();"]').click
         sleep 0.1
 
-        #visit admin_depts_path
         expect(page).to_not have_content @tech[:name]
       end
     end
 
-    #describe '修改部门' do
-    #  it "部门名称应改变" do
-    #    find(:xpath, "//table/tbody/tr/td[text()='#{@tech[:name]}']/../td[@class='text-center']/a[@title='编辑']").click
-    #    find('input[id="name"]').set @tech[:name].reverse
-    #    find('input[id="remark"]').set @tech[:remark].reverse
-    #    find('a[title="保存"]').click
-    #    sleep 0.1
+    describe '修改部门' do
+      it "部门名称应改变" do
+        find(:xpath, "//table/tbody/tr/td[text()='#{@tech[:name]}']/../td[@class='text-center']/a[@title='编辑']").click
+        find('input[id="name"]').set @tech[:name].reverse
+        find('a[title="保存"]').click
+        sleep 0.1
 
-    #    #visit admin_depts_path
-    #    expect(page).to_not have_content @tech[:name]
-    #  end
-    #end
+        expect(page).to_not have_content @tech[:name]
+      end
+    end
 
-    #describe '添加多个部门' do
-    #  it '记录条数应相符' do
-    #    btn_add = find('a[title="添加"]')
-    #    @depts.each_with_index do |dept, i|
-    #      btn_add.click
-    #      find('input[id="name"]').set(dept[:name] + "copy")
-    #      find('input[id="remark"]').set(dept[:remark] + "copy")
-    #      find('a[title="保存"]').click
-    #      sleep 1 # 等待页面就绪，暂无更好的解决方法 @gongqj 2014-05-08
-    #    end
+    describe '添加多个部门' do
+      it '记录条数应相符' do
+        btn_add = find('a[title="添加"]')
+        @depts.each_with_index do |dept, i|
+          btn_add.click
+          find('input[id="name"]').set(dept[:name] + "copy")
+          find('a[title="保存"]').click
+          sleep 1
+        end
 
-    #    visit admin_depts_path
-    #    expect(page).to have_selector('table tbody tr', count: @depts.length * 2)
-    #  end
-    #end
+        visit admin_depts_path
+        expect(page).to have_selector('table tbody tr', count: @depts.length * 2)
+      end
+    end
 
     #describe '删除所有部门' do
     #  it '记录条数应为 0' do
