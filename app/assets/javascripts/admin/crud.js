@@ -9,6 +9,12 @@ app.factory('crud', ['$http', '$compile', function($http, $compile) {
       scope.show_panel = 'list';
       scope.primaryKey = '';
 
+      scope.paginator = {};
+      scope.paginator.count = 0;
+      scope.paginator.page = 0;
+      scope.paginator.perPage = 0;
+      scope.paginator.lastPage = 0;
+
       // read data from server
       scope.read = function(c, m, params) {
         if (!params) {

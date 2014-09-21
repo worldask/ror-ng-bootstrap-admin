@@ -33,7 +33,7 @@
       .text-center{"ng-if" => "list.data.length == 0"}
         %code 没有数据
 
-      #paging.panel-body{:compile => "htmlPaging"}
+      %pagination.panel-body{:count => "{{paginator.count}}", :page => "{{paginator.page}}", "per-page" => "{{paginator.perPage}}", "last-page" => "{{paginator.lastPage}}"}
 
     #panel-edit.animate-switch{"ng-switch-when" => "edit"}
       .panel.panel-primary

@@ -25,49 +25,46 @@ app.factory('list', ['$compile', 'crud', function($compile, crud) {
           $scope[key] = value;
         });
 
-        $scope.rowCount = parseInt(response.list.total);
-        $scope.pageSize = parseInt(response.list.per_page);
-        $scope.pageCount = parseInt(response.list.last_page);
-        $scope.pageIndex = parseInt(response.list.current_page);
-
-        $scope.paging();
+        $scope.paginator.count = parseInt(response.list.count);
+        $scope.paginator.page = parseInt(response.list.page);
+        $scope.paginator.perPage = parseInt(response.list.per_page);
+        $scope.paginator.lastPage = parseInt(response.list.last_page);
       };
 
-      // 已添加
+      // after created
       $scope.afterItemCreated = function(item) {
         if ($scope.list !== undefined) {
           $scope.list.data.unshift(item);
         }
-        // 更新关联字段
+
         if (!angular.isUndefined($scope.relation) && $scope.flagAfterItemCreated) {
           //$scope.init();
         }
         $scope.closeEdit();
       };
 
-      // 已更新
+      // after Updated
       $scope.afterItemUpdated = function(item) {
         for(var key in $scope.itemModel) {
           $scope.editingItem[key] = $scope.itemModel[key];
         }
         
-        // 更新关联字段
         if (!angular.isUndefined($scope.relation) && $scope.flagAfterItemUpdated) {
           //$scope.init();
         }
         $scope.closeEdit();
       };
 
-      // 已删除
+      // after deleted
       $scope.afterItemDeleted = function(item) {
       };
       
-      // 关闭编辑界面
+      // close edit panel
       $scope.closeEdit = function() {
         $scope.show_panel = 'list';
       };
 
-      //Esc键关闭编辑界面
+      // close edit panel when pressing ESC
       $(document).keydown(function(e) {
         if(e.keyCode == 27){
           // 按Esc关闭编辑界面
@@ -75,7 +72,7 @@ app.factory('list', ['$compile', 'crud', function($compile, crud) {
         }
       });
 
-      // checkbox 选中/取消
+      // select/unselect checkbox
       $scope.onSelect = function(item) {
         if (angular.isDefined(item.$$checked) && item.$$checked === false) {
           delete $scope.selection[item.$$hashKey];
@@ -84,7 +81,7 @@ app.factory('list', ['$compile', 'crud', function($compile, crud) {
         }
       };
 
-      // 搜索
+      // search
       $scope.search = function(keyword) {
         if (angular.isUndefined(keyword) || keyword === null) {
           keyword = '';
@@ -113,71 +110,6 @@ app.factory('list', ['$compile', 'crud', function($compile, crud) {
         }
 
         $scope.read(Util.getController(), 'list', params);
-        $scope.paging();
-      };
-
-      // 分页
-      $scope.paging = function() {
-        $scope.htmlPaging = '';
-
-        if ($scope.pageCount > 1) {
-          $scope.htmlPaging += '<ul class="pagination">';
-
-          // 如果当前是第一页，上一页不可用
-          if ($scope.pageIndex > 1) {
-            $scope.htmlPaging += '<li class="prev"><a href="javascript:" ng-click="gotoPage(1);"><i class="fa fa-angle-double-left fa-lg"></i></a></li>';
-            $scope.htmlPaging += '<li class="prev"><a href="javascript:" ng-click="gotoPage(' + ($scope.pageIndex - 1) + ');"><i class="fa fa-angle-left fa-lg"></i></a></li>';
-          } else {
-            $scope.htmlPaging += '<li class="prev disabled"><a href="javascript:"><i class="fa fa-angle-double-left fa-lg"></i></a></li>';
-            $scope.htmlPaging += '<li class="prev disabled"><a href="javascript:"><i class="fa fa-angle-left fa-lg"></i></a></li>';
-          }
-
-          // 显示最大页数
-          var maxPages = 15;
-          // 默认起始页为第1页
-          var $i = 1;
-          // 计数器
-          var $j = 0;
-
-          // 如果当前页距总页数大于最大页数，起始页改为当前页
-          if ($scope.pageCount - $scope.pageIndex >= maxPages) {
-            $i = $scope.pageIndex; 
-          } else if ($scope.pageCount > maxPages) {
-            // 否则，如果总页数大于最大页数
-            $i = $scope.pageCount - maxPages + 1;
-          }
-
-          for ($i; $i <= $scope.pageCount; $i++) {
-            if ($i == $scope.pageIndex) {
-              // 如果是当前页，高亮
-              $scope.htmlPaging += '<li class="active">';
-            } else {
-              $scope.htmlPaging += '<li>';
-            }
-            $scope.htmlPaging += ('<a href="javascript:" ng-click="gotoPage(' + $i + ');">' + $i + '</a></li>');
-
-            // 最多显示15页
-            $j++;
-            if ($j >= 15) {
-              break;
-            }
-          }
-
-          // 如果当前是最后一页，下一页不可用
-          if ($scope.pageIndex < $scope.pageCount) {
-            $scope.htmlPaging += '<li class="next"><a href="javascript:" ng-click="gotoPage(' + ($scope.pageIndex + 1) + ');"><i class="fa fa-angle-right fa-lg"></i></a></li>';
-            $scope.htmlPaging += '<li class="next"><a href="javascript:" ng-click="gotoPage(' + $scope.pageCount + ');"><i class="fa fa-angle-double-right fa-lg"></i></a></li>';
-          } else {
-            $scope.htmlPaging += '<li class="next disabled"><a href="javascript:"><i class="fa fa-angle-right fa-lg"></i></a></li>';
-            $scope.htmlPaging += '<li class="next disabled"><a href="javascript:"><i class="fa fa-angle-double-right fa-lg"></i></a></li>';
-          }
-
-          $scope.htmlPaging += '</ul>';
-
-          $element.find('#paging').html($compile($scope.htmlPaging)($scope));
-        } else {
-          $element.find('#paging').html('');
-        }
       };
 
       // 初始化列表
