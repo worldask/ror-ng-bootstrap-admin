@@ -64,21 +64,8 @@ app.directive('pagination', ['$compile', function($compile) {
     scope.gotoPage = function(page) {
       var params = '?page=' + page;
 
-      if (angular.isDefined(scope.params) && scope.params !== null && scope.params !== '') {
-        params += '&s={';
-
-        var i = 0;
-        for (key in scope.params) {
-          if (scope.params.hasOwnProperty(key)) {
-            if (i > 0) {
-              params += ', ';
-            }
-            params += '"' + key + '":"' + scope.params[key] + '"';
-            i++;
-          }
-        }
-
-        params += '}';
+      if (angular.isDefined(attrs.keyword) && attrs.keyword !== null && attrs.keyword !== '') {
+        params += '&keyword=' + attrs.keyword;
       }
 
       // get data for specified page
@@ -92,7 +79,6 @@ app.directive('pagination', ['$compile', function($compile) {
   return {
     restrict: "E",
     scope: {
-      params: '@',
       read: '&'
     },
     link: link

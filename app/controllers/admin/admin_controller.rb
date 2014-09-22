@@ -6,13 +6,19 @@ class Admin::AdminController < ApplicationController
 
   def list 
     model = controller_name.classify.constantize
+    data = {:title => @@title}
     page = params[:page] == nil ? 1 : params[:page]
 
-    data = {:title => @@title}
-    data[:list] = {:data => model.page(params[:page]).per(4)}
+    if (params[:keyword].nil?) 
+      count = model.count
+      data[:list] = {:data => model.page(params[:page]).per(4)}
+    else 
+      count = model.where("name like ?", '%' +  params[:keyword] + '%').count
+      data[:list] = {:data => model.where("name like ?", '%' +  params[:keyword] + '%').page(params[:page]).per(4)}
+      data[:list][:keyword] = params[:keyword]
+    end 
 
-    # pagination
-    count = model.count
+    # paginator
     data[:list][:count] = count
     data[:list][:page] = page
     data[:list][:per_page] = 4

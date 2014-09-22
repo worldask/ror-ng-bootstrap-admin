@@ -20,11 +20,6 @@ app.factory('list', ['$compile', 'crud', function($compile, crud) {
         $scope.list = response.list;
         $scope.selection = {};
 
-        $scope.searchCondition = response.search_condition;
-        angular.forEach($scope.searchCondition, function(value, key) {
-          $scope[key] = value;
-        });
-
         $scope.paginator.count = parseInt(response.list.count);
         $scope.paginator.page = parseInt(response.list.page);
         $scope.paginator.perPage = parseInt(response.list.per_page);
@@ -83,13 +78,11 @@ app.factory('list', ['$compile', 'crud', function($compile, crud) {
 
       // search
       $scope.search = function(keyword) {
-        if (angular.isUndefined(keyword) || keyword === null) {
-          keyword = '';
-        }
-
-        $scope.read(Util.getController(), 'list', '?s={"keyword": "' + keyword + '"}');
+        if (angular.isDefined(keyword) && keyword !== null && keyword !== '') {
+          //$scope.read(Util.getController(), 'list', '?s={"keyword": "' + keyword + '"}');
+          $scope.read(Util.getController(), 'list', '?keyword=' + keyword);
+        } 
       };
-
 
       // 初始化列表
       $scope.init = function() {
