@@ -194,6 +194,7 @@ DEPENDENCIES
   factory_girl_rails
   haml-rails
   jbuilder
+  json
   kaminari
   pry
   rails
