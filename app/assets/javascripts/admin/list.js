@@ -90,27 +90,6 @@ app.factory('list', ['$compile', 'crud', function($compile, crud) {
         $scope.read(Util.getController(), 'list', '?s={"keyword": "' + keyword + '"}');
       };
 
-      // 跳到第几页
-      $scope.gotoPage = function(page) {
-        var params = '?page=' + page;
-
-        if (angular.isDefined($scope.searchCondition) && $scope.searchCondition !== null && $scope.searchCondition !== '') {
-          params += '&s={';
-
-          var i = 0;
-          for (key in $scope.searchCondition) {
-            if (i > 0) {
-              params += ', ';
-            }
-            params += '"' + key + '":"' + $scope.searchCondition[key] + '"';
-            i++;
-          }
-
-          params += '}';
-        }
-
-        $scope.read(Util.getController(), 'list', params);
-      };
 
       // 初始化列表
       $scope.init = function() {

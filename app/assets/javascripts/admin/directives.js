@@ -1,6 +1,6 @@
 app.directive('pagination', ['$compile', function($compile) {
   function link(scope, element, attrs) {
-    function generateHtml() {
+    var generateHtml = function() {
       var html = '';
 
       if (attrs.lastPage > 1) {
@@ -61,12 +61,40 @@ app.directive('pagination', ['$compile', function($compile) {
       }
     };
 
+    scope.gotoPage = function(page) {
+      var params = '?page=' + page;
+
+      if (angular.isDefined(scope.params) && scope.params !== null && scope.params !== '') {
+        params += '&s={';
+
+        var i = 0;
+        for (key in scope.params) {
+          if (scope.params.hasOwnProperty(key)) {
+            if (i > 0) {
+              params += ', ';
+            }
+            params += '"' + key + '":"' + scope.params[key] + '"';
+            i++;
+          }
+        }
+
+        params += '}';
+      }
+
+      // get data for specified page
+      scope.read({c: Util.getController(), m: 'list', params: params});
+    };
+
     attrs.$observe('page', generateHtml);
     attrs.$observe('lastPage', generateHtml);
   }
 
   return {
     restrict: "E",
+    scope: {
+      params: '@',
+      read: '&'
+    },
     link: link
   };
 }]);
