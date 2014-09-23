@@ -134,10 +134,10 @@ var Util = (function() {
     }
   }
 
-  $(document).on("click", ".ios-notify-show", function(e) {
-    showIosNotify('请稍候...');
-    return false;
-  });
+  //$(document).on("click", ".ios-notify-show", function(e) {
+  //  showIosNotify('请稍候...');
+  //  return false;
+  //});
 
   // 高亮输入错误的文本框
   var focus = function(editForm, err) {

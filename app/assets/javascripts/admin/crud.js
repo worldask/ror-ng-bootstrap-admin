@@ -9,6 +9,7 @@ app.factory('crud', ['$http', '$compile', function($http, $compile) {
       scope.show_panel = 'list';
       scope.primaryKey = '';
 
+      scope.list = {};
       scope.paginator = {};
       scope.paginator.count = 0;
       scope.paginator.page = 0;
@@ -17,28 +18,30 @@ app.factory('crud', ['$http', '$compile', function($http, $compile) {
 
       // read data from server
       scope.read = function(c, m, params) {
-        if (!params) {
-          params = '';
-        }
-
-        var p = $http({
-          method: 'GET',
-          url: c + '/' + m + params,
-        });
-        p.success(function(response){
-          document.title = response.title;
-          scope.title = response.title;
-          // must exclude these fields when saving
-          scope.relation = response.relation;
-          //scope.$broadcast('afterRead', response);
-          if (angular.isFunction(scope.afterRead)) {
-            scope.afterRead(response);
+        if (angular.isFunction(scope.beforeRead) && scope.beforeRead() === true) {
+          if (!params) {
+            params = '';
           }
-        });
-        p.error(function(response, status) {
-          Util.hideIosNotify();
-          Util.notify('操作失败', 'error');
-        });
+
+          var p = $http({
+            method: 'GET',
+            url: c + '/' + m + params,
+          });
+          p.success(function(response){
+            scope.title = response.title;
+            document.title = scope.title;
+            // must exclude relation fields when saving
+            scope.relation = response.relation;
+
+            if (angular.isFunction(scope.afterRead)) {
+              scope.afterRead(response);
+            }
+          });
+          p.error(function(response, status) {
+            Util.hideIosNotify();
+            Util.notify('操作失败', 'error');
+          });
+        }
       };
 
       // write data to server
@@ -59,8 +62,8 @@ app.factory('crud', ['$http', '$compile', function($http, $compile) {
                 // update primary key into new item
                 item[scope.primaryKey] = response[scope.primaryKey];
 
-                if (angular.isFunction(scope.afterItemCreated)) {
-                  scope.afterItemCreated(response);
+                if (angular.isFunction(scope.afterCreated)) {
+                  scope.afterCreated(response);
                 }
                 Util.notify(response.desc);
                 scope.show_panel = 'list';
@@ -76,8 +79,8 @@ app.factory('crud', ['$http', '$compile', function($http, $compile) {
           success = function(response, status) {
             Util.hideIosNotify();
             if (response.code === 1) {
-              if (angular.isFunction(scope.afterItemUpdated)) {
-                scope.afterItemUpdated(response);
+              if (angular.isFunction(scope.afterUpdated)) {
+                scope.afterUpdated(response);
               }
               Util.notify(response.desc);
               scope.show_panel = 'list';
@@ -97,8 +100,8 @@ app.factory('crud', ['$http', '$compile', function($http, $compile) {
               var index = scope.list.data.indexOf(item);
               scope.list.data.splice(index, 1);
 
-              if (angular.isFunction(scope.afterItemDeleted)) {
-                scope.afterItemDeleted(response);
+              if (angular.isFunction(scope.afterDeleted)) {
+                scope.afterDeleted(response);
               }
               Util.notify(response.desc);
               scope.show_panel = 'list';
@@ -232,6 +235,16 @@ app.factory('crud', ['$http', '$compile', function($http, $compile) {
       };
 
       scope.save = function() {
+        if (scope.itemModel[scope.primaryKey]) {
+          if (angular.isFunction(scope.beforeUpdate) && scope.beforeUpdate() !== true) {
+            return false;
+          }
+        } else {
+          if (angular.isFunction(scope.beforeCreate) && scope.beforeCreate() !== true) {
+            return false;
+          }
+        }
+
         // validate required fields
         if (angular.isDefined(scope.validate)) {
           if (scope.validate() === false) {
@@ -246,9 +259,9 @@ app.factory('crud', ['$http', '$compile', function($http, $compile) {
         if (controls.length > 0) {
           for (var i = 0; i < controls.length; i++) {
             var err = scope.checkUnique($(controls[i]),
-                scope.itemModel[scope.primaryKey],
-                $(controls[i]).attr('id'),
-                $(controls[i]).val().trim());
+              scope.itemModel[scope.primaryKey],
+              $(controls[i]).attr('id'),
+              $(controls[i]).val().trim());
           }
         } else {
           Util.showIosNotify('请稍候...');
@@ -297,11 +310,11 @@ app.factory('crud', ['$http', '$compile', function($http, $compile) {
         return result;
       };
 
-      scope.$on('batchDelete', function(event, data) {
-        if (data !== undefined) {
-          scope.batchDelete(data.selection, data.controller, data.primaryKey);
-        }
-      });
+      //scope.$on('batchDelete', function(event, data) {
+      //  if (data !== undefined) {
+      //    scope.batchDelete(data.selection, data.controller, data.primaryKey);
+      //  }
+      //});
 
       scope.batchDelete = function(selection, controller, primaryKey) {
         var items = [];
@@ -314,12 +327,12 @@ app.factory('crud', ['$http', '$compile', function($http, $compile) {
       }
 
       // 删除确认
-      scope.$on('delConfirm', function(event, data){
-        if (data !== undefined) {
-          scope.primaryKey = data.primaryKey;
-          scope.delConfirm(data.item);
-        }
-      });
+      //scope.$on('delConfirm', function(event, data){
+      //  if (data !== undefined) {
+      //    scope.primaryKey = data.primaryKey;
+      //    scope.delConfirm(data.item);
+      //  }
+      //});
 
       scope.delConfirm = function(item, message) {
         if (message == undefined) {
@@ -338,7 +351,7 @@ app.factory('crud', ['$http', '$compile', function($http, $compile) {
             + '                <h3 class="text-center">' + message + '</h3>'
             + '            </div>'
             + '            <div class="modal-footer">'
-            + '                <a class="btn btn-danger ios-notify-show" ng-click="del();" data-dismiss="modal"><i class="fa fa-trash-o fa-lg"></i></a>'
+            + '                <a class="btn btn-danger" ng-click="del();" data-dismiss="modal"><i class="fa fa-trash-o fa-lg"></i></a>'
             + '                <a class="btn btn-default" data-dismiss="modal"><i class="fa fa-times fa-lg"></i></a>'
             + '            </div>'
             + '        </div>'
@@ -352,40 +365,44 @@ app.factory('crud', ['$http', '$compile', function($http, $compile) {
         $('#delConfirmModal').modal("show");
       };
 
-      // 删除
+      // delete data
       scope.del = function() {
-        if (Util.isArray(scope.itemDel)) {
-          // 删除多条数据
-          var p = $http({
-            method: 'DELETE',
-            headers: {'Content-Type': 'application/json'},
-            data: {items: scope.itemDel},
-            url: Util.getController() + '/multi_delete'
-          });
-          p.success(function(response){
-            if (response.code == "0") {
-              for(var i = 0; i< scope.itemDel.length; i++) {
-                //scope.$broadcast('afterItemDeleted', scope.itemDel[i]);
-                if (angular.isFunction(scope.afterItemDeleted)) {
-                  scope.afterItemDeleted(response);
-                }
-              }
-              notify('删除成功');
-            } else {
-              notify(response.desc);
-            }
-          })
-          p.error(function(response, status) {
-            Util.notify('系统错误，请联系管理员', 'error');
-          })
+        if (angular.isFunction(scope.beforeDelete) && scope.beforeDelete() === true) {
+          showIosNotify('processing...');
 
-          // 批量删除状态复位
-          _selection = {};
-          scope.$broadcast('afterBatchDelete', {});
-        } else {
-          var data = {}; 
-          data[scope.primaryKey] = scope.itemDel[scope.primaryKey];
-          scope.write(Util.getController(), 'destroy', data, scope.itemDel);
+          if (Util.isArray(scope.itemDel)) {
+            // delete multiple rows 
+            var p = $http({
+              method: 'DELETE',
+              headers: {'Content-Type': 'application/json'},
+              data: {items: scope.itemDel},
+              url: Util.getController() + '/multi_delete'
+            });
+            p.success(function(response){
+              if (response.code == "0") {
+                for(var i = 0; i< scope.itemDel.length; i++) {
+                  //scope.$broadcast('afterItemDeleted', scope.itemDel[i]);
+                  if (angular.isFunction(scope.afterItemDeleted)) {
+                    scope.afterItemDeleted(response);
+                  }
+                }
+                notify('删除成功');
+              } else {
+                notify(response.desc);
+              }
+            })
+            p.error(function(response, status) {
+              Util.notify('系统错误，请联系管理员', 'error');
+            })
+
+            // 批量删除状态复位
+            _selection = {};
+            //scope.$broadcast('afterBatchDelete', {});
+          } else {
+            var data = {}; 
+            data[scope.primaryKey] = scope.itemDel[scope.primaryKey];
+            scope.write(Util.getController(), 'destroy', data, scope.itemDel);
+          }
         }
       };
 

@@ -7,8 +7,16 @@ app.factory('list', ['$compile', 'crud', function($compile, crud) {
       crud.extend($scope, $element);
       $scope.selection = {};
 
+      // before read
+      $scope.beforeRead = function() {
+        // console.info("before read");
+        return true;
+      };
+
       // after read
       $scope.afterRead = function(response) {
+        // console.info("after read");
+
         $scope.flagAfterItemCreated = true;
         $scope.flagAfterItemUpdated = true;
 
@@ -26,8 +34,16 @@ app.factory('list', ['$compile', 'crud', function($compile, crud) {
         $scope.paginator.lastPage = parseInt(response.list.last_page);
       };
 
+      // before create
+      $scope.beforeCreate = function() {
+        // console.info("before create");
+        return true;
+      };
+
       // after created
-      $scope.afterItemCreated = function(item) {
+      $scope.afterCreated = function(item) {
+        // console.info("after created");
+
         if ($scope.list !== undefined) {
           $scope.list.data.unshift(item);
         }
@@ -38,8 +54,16 @@ app.factory('list', ['$compile', 'crud', function($compile, crud) {
         $scope.closeEdit();
       };
 
+      // before Updated
+      $scope.beforeUpdate = function() {
+        // console.info("before update");
+        return true;
+      };
+
       // after Updated
-      $scope.afterItemUpdated = function(item) {
+      $scope.afterUpdated = function(item) {
+        // console.info("after updated");
+
         for(var key in $scope.itemModel) {
           $scope.editingItem[key] = $scope.itemModel[key];
         }
@@ -50,8 +74,15 @@ app.factory('list', ['$compile', 'crud', function($compile, crud) {
         $scope.closeEdit();
       };
 
+      // before deleted
+      $scope.beforeDelete = function() {
+        // console.info("before delete");
+        return true;
+      };
+
       // after deleted
-      $scope.afterItemDeleted = function(item) {
+      $scope.afterDeleted = function(item) {
+        // console.info("after deleted");
       };
       
       // close edit panel
@@ -83,22 +114,20 @@ app.factory('list', ['$compile', 'crud', function($compile, crud) {
           $scope.read(Util.getController(), 'list', '?keyword=' + keyword);
         } 
       };
+      // search when pressing enter
+      $("#panel-list input[name=q]").off('keydown');
+      $("#panel-list input[name=q]").on('keydown', function(e) {
+        if (e.keyCode == 13) {
+          $scope.search(this.value);
+          this.select();
+        }
+      });
 
-      // 初始化列表
+      // init 
       $scope.init = function() {
-        // 从url获取控制器名称
         var controller = Util.getController();
         $scope.read(controller, 'list');
-        $scope.keyword = '';
-
-        // 回车搜索
-        $("#panel-list input[name=q]").off('keydown');
-        $("#panel-list input[name=q]").on('keydown', function(e) {
-          if (e.keyCode == 13) {
-            $scope.search(this.value);
-            this.select();
-          }
-        });
+        $scope.list.keyword = '';
       };
     }
   };
