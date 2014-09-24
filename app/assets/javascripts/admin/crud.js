@@ -1,4 +1,5 @@
-app.factory('crud', ['$http', '$compile', function($http, $compile) {
+app.factory('crud', ['$http', '$compile', '$animate', '$q', function($http, $compile, $animate, $q) {
+  'use strict';
   // checked rows in table {item.$$hashKey : item}
   var _selection = {};
 
@@ -6,7 +7,6 @@ app.factory('crud', ['$http', '$compile', function($http, $compile) {
     extend: function(scope, element) {
       document.title = '';
       scope.title = '';
-      scope.show_panel = 'list';
       scope.primaryKey = '';
 
       scope.list = {};
@@ -66,7 +66,8 @@ app.factory('crud', ['$http', '$compile', function($http, $compile) {
                   scope.afterCreated(response);
                 }
                 Util.notify(response.desc);
-                scope.show_panel = 'list';
+                element.find('#panel-list').removeClass('dn').addClass('db');
+                element.find('#panel-edit').removeClass('db').addClass('dn');
               } else {
                 Util.notify(response.desc, 'error');
               }
@@ -83,7 +84,8 @@ app.factory('crud', ['$http', '$compile', function($http, $compile) {
                 scope.afterUpdated(response);
               }
               Util.notify(response.desc);
-              scope.show_panel = 'list';
+              element.find('#panel-list').removeClass('dn').addClass('db');
+              element.find('#panel-edit').removeClass('db').addClass('dn');
             } else {
               Util.notify(response.desc, 'error');
             }
@@ -104,7 +106,8 @@ app.factory('crud', ['$http', '$compile', function($http, $compile) {
                 scope.afterDeleted(response);
               }
               Util.notify(response.desc);
-              scope.show_panel = 'list';
+              element.find('#panel-list').removeClass('dn').addClass('db');
+              element.find('#panel-edit').removeClass('db').addClass('dn');
             } else {
               Util.notify(response.desc, 'error');
             }
@@ -132,15 +135,18 @@ app.factory('crud', ['$http', '$compile', function($http, $compile) {
 
       // show edit panel
       scope.edit = function(item) {
-        $("#editForm .has-success").removeClass("has-success");
-        $("#editForm .has-error").removeClass("has-error");
-
         scope.editingItem = item;
         scope.itemModel = angular.copy(item);
 
-        scope.show_panel = 'edit';
-        //$animate.enter(element, parentElement).then(function() {
-        //  angular.element(element).find("input:text").first().focus();
+        element.find('#panel-list').removeClass('db').addClass('dn');
+        element.find('#panel-edit').removeClass('dn').addClass('db');
+
+        element.find("#editForm .has-success").removeClass("has-success");
+        element.find("#editForm .has-error").removeClass("has-error");
+        //$animate.setClass(element.find("#panel-list"), 'db', 'dn')
+        //.then($animate.setClass(element.find("#panel-edit"), 'dn', 'db'));
+        //.then(function() {
+        //  console.log('entered');
         //});
         //  // after animating, focus to the first textbox and select all text
         //  $("#panel-edit :text").first().focus();
@@ -368,7 +374,7 @@ app.factory('crud', ['$http', '$compile', function($http, $compile) {
       // delete data
       scope.del = function() {
         if (angular.isFunction(scope.beforeDelete) && scope.beforeDelete() === true) {
-          showIosNotify('processing...');
+          Util.showIosNotify('processing...');
 
           if (Util.isArray(scope.itemDel)) {
             // delete multiple rows 
