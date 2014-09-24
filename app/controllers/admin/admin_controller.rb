@@ -14,7 +14,7 @@ class Admin::AdminController < ApplicationController
       data[:list] = {:data => model.page(params[:page]).per(4)}
     else 
       count = model.where("name like ?", '%' +  params[:keyword] + '%').count
-      data[:list] = {:data => model.where("name like ?", '%' +  params[:keyword] + '%').page(params[:page]).per(4)}
+      data[:list] = {:data => model.where("name like ?", "%#{params[:keyword]}%").page(params[:page]).per(4)}
       data[:list][:keyword] = params[:keyword]
     end 
 
