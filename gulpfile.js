@@ -28,14 +28,14 @@ gulp.task('clean', function(cb) {
 
 gulp.task('vendor_js', function () {
   var files = [
+    'vendor/assets/bower_components/jquery/dist/jquery.min.js',
     'vendor/assets/bower_components/angular/angular.min.js',
     'vendor/assets/bower_components/angular-animate/angular-animate.min.js',
     'vendor/assets/bower_components/angular-route/angular-route.min.js',
-    'vendor/assets/bower_components/jquery/dist/jquery.min.js',
     'vendor/assets/bower_components/bootstrap/dist/js/bootstrap.min.js',
-    'vendor/assets/bower_components/bootstrap-datepicker-n9/js/bootstrap-datepicker.js',
-    'vendor/assets/bower_components/bootstrap-datepicker-n9/js/locales/bootstrap-datepicker.zh-CN.js',
-    'vendor/assets/bower_components/angular-bootstrap-nav-tree/dist/abn_tree_directive.js',
+    //'vendor/assets/bower_components/bootstrap-datepicker-n9/js/bootstrap-datepicker.js',
+    //'vendor/assets/bower_components/bootstrap-datepicker-n9/js/locales/bootstrap-datepicker.zh-CN.js',
+    //'vendor/assets/bower_components/angular-bootstrap-nav-tree/dist/abn_tree_directive.js',
     'vendor/assets/bower_components/spinjs/spin.js',
     'vendor/assets/bower_components/iOS-Overlay/js/iosOverlay.js',
     'vendor/assets/bower_components/noty/js/noty/jquery.noty.js',
@@ -44,7 +44,7 @@ gulp.task('vendor_js', function () {
   ];
 
   return gulp.src(files)
-  //.pipe(ngmin())
+  .pipe(ngmin())
   .pipe(concat('vendor.js'))
   .pipe(gulp.dest(paths.dest_admin_dev))
   .pipe(gulp.dest(paths.dest_admin));
@@ -54,8 +54,8 @@ gulp.task('vendor_css', function () {
   var files = [
     'vendor/assets/bower_components/font-awesome/css/font-awesome.min.css',
     'vendor/assets/bower_components/bootstrap/dist/css/bootstrap.min.css',
-    'vendor/assets/bower_components/bootstrap-datepicker-n9/css/datepicker3.css',
-    'vendor/assets/bower_components/angular-bootstrap-nav-tree/dist/abn_tree.css',
+    //'vendor/assets/bower_components/bootstrap-datepicker-n9/css/datepicker3.css',
+    //'vendor/assets/bower_components/angular-bootstrap-nav-tree/dist/abn_tree.css',
     'vendor/assets/bower_components/iOS-Overlay/css/iosOverlay.css',
   ];
 
@@ -109,6 +109,7 @@ gulp.task('js_admin_app', function () {
     'app/assets/javascripts/admin/root.js',
     'app/assets/javascripts/admin/crud.js',
     'app/assets/javascripts/admin/filters.js',
+    'app/assets/javascripts/admin/directives.js',
     'app/assets/javascripts/admin/util.js'
   ];
 
@@ -127,13 +128,14 @@ gulp.task('js_admin', function () {
     '!app/assets/javascripts/admin/root.js',
     '!app/assets/javascripts/admin/crud.js',
     '!app/assets/javascripts/admin/filters.js',
+    '!app/assets/javascripts/admin/directives.js',
     '!app/assets/javascripts/admin/util.js'
   ];
 
   return gulp.src(files)
   .pipe(jshint())
-  .pipe(uglify())
-  .pipe(ngmin())
+  //.pipe(uglify())
+  //.pipe(ngmin())
   .pipe(gulp.dest(paths.dest_admin_dev))
   .pipe(gulp.dest(paths.dest_admin));
 });
@@ -154,7 +156,7 @@ gulp.task('css_admin', ['scss_admin'], function () {
 
 gulp.task('watch', function() {
   gulp.watch(paths.js_admin, ['js_admin', 'js_admin_app']);
-  gulp.watch(paths.scss_admin, ['scss_admin']);
+  gulp.watch(paths.scss_admin, ['scss_admin', 'css_admin']);
 });
 
 //gulp.task('default', ['vendor_js', 'vendor_css', 'vendor_fonts', 'js_app', 'js', 'scss', 'css']);
