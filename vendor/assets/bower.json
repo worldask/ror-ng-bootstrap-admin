@@ -7,9 +7,8 @@
     "bootstrap": "latest",
     "font-awesome": "latest",
     "noty": "latest",
-    "modernizr": "latest",
     "spinjs": "latest",
     "iOS-Overlay": "latest",
-    "bootstrap-datepicker-n9": "latest"
+    "modernizr": "latest"
   }
 }
