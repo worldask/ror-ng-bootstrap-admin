@@ -62,8 +62,7 @@ footer {
 
 /*表格行hover样式*/
 .table-hover > tbody > tr:hover > td {
-  color: #fff;
-  background-color: #357ebd; }
+  background-color: #d9edf7; }
 
 #panel-edit input[type="checkbox"] {
   width: 10%;
