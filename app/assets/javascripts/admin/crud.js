@@ -75,7 +75,7 @@ app.factory('crud', ['$http', '$compile', '$animate', '$q', function($http, $com
                 item[scope.primaryKey] = response[scope.primaryKey];
 
                 for (var i = 0; i < scope.afterCreated.length; i++) {
-                  (scope.afterCreated[i])(response);
+                  (scope.afterCreated[i])(item);
                 }
                 Util.notify(response.desc);
                 element.find('#panel-list').removeClass('dn').addClass('db');
