@@ -5,7 +5,7 @@ app.factory('list', ['$compile', 'crud', function($compile, crud) {
   return {
     extend: function($scope, $element) {
       crud.extend($scope, $element);
-      $scope.selection = {};
+      $scope.selection = [];
 
       // before read
       $scope.beforeRead = function() {
@@ -26,7 +26,7 @@ app.factory('list', ['$compile', 'crud', function($compile, crud) {
         }
 
         $scope.list = response.list;
-        $scope.selection = {};
+        $scope.selection = [];
 
         $scope.paginator.count = parseInt(response.list.count);
         $scope.paginator.page = parseInt(response.list.page);
@@ -102,9 +102,15 @@ app.factory('list', ['$compile', 'crud', function($compile, crud) {
       // select/unselect checkbox
       $scope.onSelect = function(item) {
         if (angular.isDefined(item.$$checked) && item.$$checked === false) {
-          delete $scope.selection[item.$$hashKey];
+          var index, i;
+
+          for(i = 0; i< $scope.selection.length; i++) {
+            // remove item from list, and reindex the list
+            index = $scope.selection.indexOf(item);
+            $scope.selection.splice(index, 1);
+          }
         } else {
-          $scope.selection[item.$$hashKey] = item;
+          $scope.selection.push(item);
         }
       };
 

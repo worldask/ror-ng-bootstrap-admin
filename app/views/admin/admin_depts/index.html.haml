@@ -2,7 +2,7 @@
   .col-lg-8.input-group.pull-left
     %a.btn.btn-success{:title => "添加", "ng-click" => "edit({});"}
       %i.fa.fa-plus
-    %a#btnBatchDelete.btn.btn-danger{:title => "批量删除", "ng-click" => "batchDelete(selection);"}
+    %a#btnBatchDelete.btn.btn-danger{:title => "批量删除", "ng-click" => "bulkDelete(selection);"}
       %i.fa.fa-trash-o
   .col-lg-4.input-group.pull-right
     %input.form-control{:type => "text", :name => "q", :placeholder => "请输入搜索关键字", "ng-model" => "list.keyword"}

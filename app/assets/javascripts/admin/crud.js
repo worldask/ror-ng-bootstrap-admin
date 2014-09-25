@@ -1,7 +1,5 @@
 app.factory('crud', ['$http', '$compile', '$animate', '$q', function($http, $compile, $animate, $q) {
   'use strict';
-  // checked rows in table {item.$$hashKey : item}
-  var _selection = {};
 
   return {
     extend: function(scope, element) {
@@ -316,29 +314,14 @@ app.factory('crud', ['$http', '$compile', '$animate', '$q', function($http, $com
         return result;
       };
 
-      //scope.$on('batchDelete', function(event, data) {
-      //  if (data !== undefined) {
-      //    scope.batchDelete(data.selection, data.controller, data.primaryKey);
-      //  }
-      //});
-
-      scope.batchDelete = function(selection, controller, primaryKey) {
+      scope.bulkDelete = function(selection) {
         var items = [];
 
         for(var key in selection) {
           items.push(selection[key]);
         }
-        scope.delConfirm(items, controller, primaryKey);
-        _selection = selection;
+        scope.delConfirm(items);
       }
-
-      // 删除确认
-      //scope.$on('delConfirm', function(event, data){
-      //  if (data !== undefined) {
-      //    scope.primaryKey = data.primaryKey;
-      //    scope.delConfirm(data.item);
-      //  }
-      //});
 
       scope.delConfirm = function(item, message) {
         if (message == undefined) {
@@ -376,37 +359,42 @@ app.factory('crud', ['$http', '$compile', '$animate', '$q', function($http, $com
         if (angular.isFunction(scope.beforeDelete) && scope.beforeDelete() === true) {
           Util.showIosNotify('processing...');
 
+          // bulk delete
           if (Util.isArray(scope.itemDel)) {
+            var ids = [];
             var authenticity_token = $("meta[name='csrf-token']").attr('content');
+
+            for (var i = 0; i< scope.itemDel.length; i++) {
+              ids.push(scope.itemDel[i].id);
+            }
 
             // delete multiple rows 
             var p = $http({
               method: 'DELETE',
               headers: {'Content-Type': 'application/json'},
-              data: {items: scope.itemDel, authenticity_token: authenticity_token},
+              data: {ids: ids, authenticity_token: authenticity_token},
               url: Util.getController() + '/bulk_delete'
             });
             p.success(function(response){
-              if (response.code == "0") {
+              if (response.code === 1) {
                 for(var i = 0; i< scope.itemDel.length; i++) {
-                  //scope.$broadcast('afterItemDeleted', scope.itemDel[i]);
-                  if (angular.isFunction(scope.afterItemDeleted)) {
-                    scope.afterItemDeleted(response);
+                  // remove item from list, and reindex the list
+                  var index = scope.list.data.indexOf(scope.selection.pop());
+                  scope.list.data.splice(index, 1);
+
+                  if (angular.isFunction(scope.afterDeleted)) {
+                    scope.afterDeleted(response);
                   }
                 }
-                notify('删除成功');
-              } else {
-                notify(response.desc);
               }
+
+              Util.hideIosNotify();
+              Util.notify(response.desc);
             })
             p.error(function(response, status) {
               Util.hideIosNotify();
               Util.notify('系统错误，请联系管理员', 'error');
             })
-
-            // 批量删除状态复位
-            _selection = {};
-            //scope.$broadcast('afterBatchDelete', {});
           } else {
             var data = {}; 
             data[scope.primaryKey] = scope.itemDel[scope.primaryKey];

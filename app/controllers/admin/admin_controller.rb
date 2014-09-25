@@ -64,7 +64,7 @@ class Admin::AdminController < ApplicationController
   end
 
   def bulk_delete
-    model.where(:id => JSON.parse(params[:items])).update_all(:is_deleted => 1)
+    model.where(:id => params[:ids]).update_all(:is_deleted => 1)
 
     render json: {code: 1, desc: '删除成功！'}
   end
