@@ -3,90 +3,90 @@
 // factory for list pages
 app.factory('list', ['$compile', 'crud', function($compile, crud) {
   return {
-    extend: function($scope, $element) {
-      crud.extend($scope, $element);
-      $scope.selection = [];
+    extend: function(scope, $element) {
+      crud.extend(scope, $element);
+      scope.selection = [];
 
       // before read
-      $scope.beforeRead = function() {
+      scope.beforeRead = function() {
         // console.info("before read");
         return true;
       };
 
       // after read
-      $scope.afterRead = function(response) {
+      scope.afterRead = function(response) {
         // console.info("after read");
 
-        $scope.flagAfterItemCreated = true;
-        $scope.flagAfterItemUpdated = true;
+        scope.flagAfterItemCreated = true;
+        scope.flagAfterItemUpdated = true;
 
-        $scope.primaryKey = response.primaryKey;
-        if ($scope.primaryKey == undefined) {
-          $scope.primaryKey = 'id';
+        scope.primaryKey = response.primaryKey;
+        if (scope.primaryKey == undefined) {
+          scope.primaryKey = 'id';
         }
 
-        $scope.list = response.list;
-        $scope.selection = [];
+        scope.list = response.list;
+        scope.selection = [];
 
-        $scope.paginator.count = parseInt(response.list.count);
-        $scope.paginator.page = parseInt(response.list.page);
-        $scope.paginator.perPage = parseInt(response.list.per_page);
-        $scope.paginator.lastPage = parseInt(response.list.last_page);
+        scope.paginator.count = parseInt(response.list.count);
+        scope.paginator.page = parseInt(response.list.page);
+        scope.paginator.perPage = parseInt(response.list.per_page);
+        scope.paginator.lastPage = parseInt(response.list.last_page);
       };
 
       // before create
-      $scope.beforeCreate = function() {
+      scope.beforeCreate = function() {
         // console.info("before create");
         return true;
       };
 
       // after created
-      $scope.afterCreated = function(item) {
+      scope.afterCreated = function(item) {
         // console.info("after created");
 
-        if ($scope.list !== undefined) {
-          $scope.list.data.unshift(item);
+        if (scope.list !== undefined) {
+          scope.list.data.unshift(item);
         }
 
-        if (!angular.isUndefined($scope.relation) && $scope.flagAfterItemCreated) {
-          //$scope.init();
+        if (!angular.isUndefined(scope.relation) && scope.flagAfterItemCreated) {
+          //scope.init();
         }
-        $scope.closeEdit();
+        scope.closeEdit();
       };
 
       // before Updated
-      $scope.beforeUpdate = function() {
+      scope.beforeUpdate = function() {
         // console.info("before update");
         return true;
       };
 
       // after Updated
-      $scope.afterUpdated = function(item) {
+      scope.afterUpdated = function(item) {
         // console.info("after updated");
 
-        for(var key in $scope.itemModel) {
-          $scope.editingItem[key] = $scope.itemModel[key];
+        for(var key in scope.itemModel) {
+          scope.editingItem[key] = scope.itemModel[key];
         }
         
-        if (!angular.isUndefined($scope.relation) && $scope.flagAfterItemUpdated) {
-          //$scope.init();
+        if (!angular.isUndefined(scope.relation) && scope.flagAfterItemUpdated) {
+          //scope.init();
         }
-        $scope.closeEdit();
+        scope.closeEdit();
       };
 
       // before deleted
-      $scope.beforeDelete = function() {
+      scope.beforeDelete = function() {
         // console.info("before delete");
         return true;
       };
 
       // after deleted
-      $scope.afterDeleted = function(item) {
+      scope.afterDeleted = function(item) {
         // console.info("after deleted");
       };
       
       // close edit panel
-      $scope.closeEdit = function() {
+      scope.closeEdit = function() {
         $element.find('#panel-list').removeClass('dn').addClass('db');
         $element.find('#panel-edit').removeClass('db').addClass('dn');
       };
@@ -95,46 +95,46 @@ app.factory('list', ['$compile', 'crud', function($compile, crud) {
       $(document).keydown(function(e) {
         if(e.keyCode == 27){
           // 按Esc关闭编辑界面
-          $scope.closeEdit();
+          scope.closeEdit();
         }
       });
 
       // select/unselect checkbox
-      $scope.onSelect = function(item) {
+      scope.onSelect = function(item) {
         if (angular.isDefined(item.$$checked) && item.$$checked === false) {
           var index, i;
 
-          for(i = 0; i< $scope.selection.length; i++) {
+          for(i = 0; i< scope.selection.length; i++) {
             // remove item from list, and reindex the list
-            index = $scope.selection.indexOf(item);
-            $scope.selection.splice(index, 1);
+            index = scope.selection.indexOf(item);
+            scope.selection.splice(index, 1);
           }
         } else {
-          $scope.selection.push(item);
+          scope.selection.push(item);
         }
       };
 
       // search
-      $scope.search = function(keyword) {
+      scope.search = function(keyword) {
         if (angular.isDefined(keyword) && keyword !== null && keyword !== '') {
-          //$scope.read(Util.getController(), 'list', '?s={"keyword": "' + keyword + '"}');
-          $scope.read(Util.getController(), 'list', '?keyword=' + keyword);
+          //scope.read(Util.getController(), 'list', '?s={"keyword": "' + keyword + '"}');
+          scope.read(Util.getController(), 'list', '?keyword=' + keyword);
         } 
       };
       // search when pressing enter
       $("#panel-list input[name=q]").off('keydown');
       $("#panel-list input[name=q]").on('keydown', function(e) {
         if (e.keyCode == 13) {
-          $scope.search(this.value);
+          scope.search(this.value);
           this.select();
         }
       });
 
       // init 
-      $scope.init = function() {
+      scope.init = function() {
         var controller = Util.getController();
-        $scope.read(controller, 'list');
-        $scope.list.keyword = '';
+        scope.read(controller, 'list');
+        scope.list.keyword = '';
       };
     }
   };
