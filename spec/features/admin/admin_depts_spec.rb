@@ -1,22 +1,22 @@
 # coding: utf-8
 require 'rails_helper'
 
-feature "Admin::AdminDepts", :type => :feature, :js => true do
+feature AdminDept, :type => :feature, :js => true do
   before(:all) do
     @depts = [
-      @tech = { :name => '技术部' },
-      @oper = { :name => '运营部' },
+      @tech = { :name => 'tech dept' },
+      @oper = { :name => 'op dept' },
     ]
   end
 
-  #context '搜索' do
-  #  it_behaves_like 'shared search feature examples', '/admin/depts' do
-  #    let(:hash_ary)                 { @depts }
-  #    let(:keyword_part)             { '部' }
-  #    let(:keyword_part_match_count) { 2 }
-  #    let(:keyword_whole)            { '技术部' }
-  #  end
-  #end
+  context '搜索' do
+    it_behaves_like 'shared search feature examples', '/admin/depts' do
+      let(:hash_ary)                 { @depts }
+      let(:keyword_part)             { 'dept' }
+      let(:keyword_part_match_count) { 2 }
+      let(:keyword_whole)            { 'tech dept' }
+    end
+  end
 
   context '编辑' do
     before(:each) do

@@ -23,7 +23,7 @@ shared_examples 'shared search feature examples' do |path|
   describe '搜索 <keyword_whole>' do
     it '记录条数应为 1' do
       find(:xpath, "//input[@name='q']").set keyword_whole
-      find(:xpath, "//a[@ng-click='search(keyword);']").click
+      find(:xpath, "//a[@ng-click='search(list.keyword);']").click
       sleep 0.1
 
       expect(page).to have_selector('table tbody tr', count: 1)
@@ -33,7 +33,7 @@ shared_examples 'shared search feature examples' do |path|
   describe '搜索不存在的记录 A026C12D-0247-4424-A524-82856876FA48' do
     it '记录条数应为 0' do
       find(:xpath, "//input[@name='q']").set 'A026C12D-0247-4424-A524-82856876FA48'
-      find(:xpath, "//a[@ng-click='search(keyword);']").click
+      find(:xpath, "//a[@ng-click='search(list.keyword);']").click
       sleep 0.1
 
       expect(page).to have_selector('table tbody tr', count: 0)
@@ -43,7 +43,7 @@ shared_examples 'shared search feature examples' do |path|
   describe '搜索 <keyword_part>' do
     it '记录条数应为 keyword_part_match_count' do
       find(:xpath, "//input[@name='q']").set keyword_part
-      find(:xpath, "//a[@ng-click='search(keyword);']").click
+      find(:xpath, "//a[@ng-click='search(list.keyword);']").click
       sleep 0.1
 
       expect(page).to have_selector('table tbody tr', count: keyword_part_match_count)
@@ -53,7 +53,7 @@ shared_examples 'shared search feature examples' do |path|
   describe '查询空字符串' do
     it '记录数应为 <hash_ary.length>' do
       find(:xpath, "//input[@name='q']").set ''
-      find(:xpath, "//a[@ng-click='search(keyword);']").click
+      find(:xpath, "//a[@ng-click='search(list.keyword);']").click
       sleep 0.1
 
       expect(page).to have_selector('table tbody tr', count: hash_ary.length)
