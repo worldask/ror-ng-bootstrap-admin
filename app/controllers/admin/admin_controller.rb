@@ -1,12 +1,10 @@
 class Admin::AdminController < ApplicationController
-  @@title = ''
-
   def index
   end
 
   def list 
     model = controller_name.classify.constantize
-    data = {:title => @@title}
+    data = {:title => model.title}
     page = params[:page] == nil ? 1 : params[:page]
 
     if (params[:keyword].nil?) 
