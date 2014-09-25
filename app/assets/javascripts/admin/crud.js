@@ -7,6 +7,15 @@ app.factory('crud', ['$http', '$compile', '$animate', '$q', function($http, $com
       scope.title = '';
       scope.primaryKey = '';
 
+      scope.beforeRead = [];
+      scope.afterRead = [];
+      scope.beforeCreate = [];
+      scope.afterCreated = [];
+      scope.beforeUpdate = [];
+      scope.afterUpdated = [];
+      scope.beforeDelete = [];
+      scope.afterDeleted= [];
+
       scope.list = {};
       scope.paginator = {};
       scope.paginator.count = 0;
@@ -16,7 +25,12 @@ app.factory('crud', ['$http', '$compile', '$animate', '$q', function($http, $com
 
       // read data from server
       scope.read = function(c, m, params) {
-        if (angular.isFunction(scope.beforeRead) && scope.beforeRead() === true) {
+        var beforeResult = true;
+        for (var i = 0; i < scope.beforeRead.length; i++) {
+          beforeResult = beforeResult && (scope.beforeRead[i])();
+        }
+
+        if (beforeResult === true) {
           if (!params) {
             params = '';
           }
@@ -31,8 +45,8 @@ app.factory('crud', ['$http', '$compile', '$animate', '$q', function($http, $com
             // must exclude relation fields when saving
             scope.relation = response.relation;
 
-            if (angular.isFunction(scope.afterRead)) {
-              scope.afterRead(response);
+            for (var i = 0; i < scope.afterRead.length; i++) {
+              (scope.afterRead[i])(response);
             }
           });
           p.error(function(response, status) {
@@ -60,8 +74,8 @@ app.factory('crud', ['$http', '$compile', '$animate', '$q', function($http, $com
                 // update primary key into new item
                 item[scope.primaryKey] = response[scope.primaryKey];
 
-                if (angular.isFunction(scope.afterCreated)) {
-                  scope.afterCreated(response);
+                for (var i = 0; i < scope.afterCreated.length; i++) {
+                  (scope.afterCreated[i])(response);
                 }
                 Util.notify(response.desc);
                 element.find('#panel-list').removeClass('dn').addClass('db');
@@ -78,8 +92,8 @@ app.factory('crud', ['$http', '$compile', '$animate', '$q', function($http, $com
           success = function(response, status) {
             Util.hideIosNotify();
             if (response.code === 1) {
-              if (angular.isFunction(scope.afterUpdated)) {
-                scope.afterUpdated(response);
+              for (var i = 0; i < scope.afterUpdated.length; i++) {
+                (scope.afterUpdated[i])(response);
               }
               Util.notify(response.desc);
               element.find('#panel-list').removeClass('dn').addClass('db');
@@ -100,8 +114,8 @@ app.factory('crud', ['$http', '$compile', '$animate', '$q', function($http, $com
               var index = scope.list.data.indexOf(item);
               scope.list.data.splice(index, 1);
 
-              if (angular.isFunction(scope.afterDeleted)) {
-                scope.afterDeleted(response);
+              for (var i = 0; i < scope.afterDeleted.length; i++) {
+                (scope.afterDeleted[i])(response);
               }
               Util.notify(response.desc);
               element.find('#panel-list').removeClass('dn').addClass('db');
@@ -239,14 +253,19 @@ app.factory('crud', ['$http', '$compile', '$animate', '$q', function($http, $com
       };
 
       scope.save = function() {
+        var i, beforeResult = true;
+
         if (scope.itemModel[scope.primaryKey]) {
-          if (angular.isFunction(scope.beforeUpdate) && scope.beforeUpdate() !== true) {
-            return false;
+          for (i = 0; i < scope.beforeUpdate.length; i++) {
+            beforeResult = beforeResult && (scope.beforeUpdate[i])();
           }
         } else {
-          if (angular.isFunction(scope.beforeCreate) && scope.beforeCreate() !== true) {
-            return false;
+          for (i = 0; i < scope.beforeCreate.length; i++) {
+            beforeResult = beforeResult && (scope.beforeCreate[i])();
           }
+        }
+        if (beforeResult === false) {
+          return false;
         }
 
         // validate required fields
@@ -356,7 +375,12 @@ app.factory('crud', ['$http', '$compile', '$animate', '$q', function($http, $com
 
       // delete data
       scope.del = function() {
-        if (angular.isFunction(scope.beforeDelete) && scope.beforeDelete() === true) {
+        var beforeResult = true;
+        for (var i = 0; i < scope.beforeDelete.length; i++) {
+          beforeResult = beforeResult && (scope.beforeDelete[i])();
+        }
+
+        if (beforeResult === true) {
           Util.showIosNotify('processing...');
 
           // bulk delete
@@ -382,8 +406,8 @@ app.factory('crud', ['$http', '$compile', '$animate', '$q', function($http, $com
                   var index = scope.list.data.indexOf(scope.selection.pop());
                   scope.list.data.splice(index, 1);
 
-                  if (angular.isFunction(scope.afterDeleted)) {
-                    scope.afterDeleted(response);
+                  for (var i = 0; i < scope.afterDeleted.length; i++) {
+                    (scope.afterDeleted[i])(response);
                   }
                 }
               }

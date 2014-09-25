@@ -8,13 +8,13 @@ app.factory('list', ['$compile', 'crud', function($compile, crud) {
       scope.selection = [];
 
       // before read
-      scope.beforeRead = function() {
+      scope.beforeRead.push(function() {
         // console.info("before read");
         return true;
-      };
+      });
 
       // after read
-      scope.afterRead = function(response) {
+      scope.afterRead.push(function(response) {
         // console.info("after read");
 
         scope.flagAfterItemCreated = true;
@@ -32,16 +32,16 @@ app.factory('list', ['$compile', 'crud', function($compile, crud) {
         scope.paginator.page = parseInt(response.list.page);
         scope.paginator.perPage = parseInt(response.list.per_page);
         scope.paginator.lastPage = parseInt(response.list.last_page);
-      };
+      });
 
       // before create
-      scope.beforeCreate = function() {
+      scope.beforeCreate.push(function() {
         // console.info("before create");
         return true;
-      };
+      });
 
       // after created
-      scope.afterCreated = function(item) {
+      scope.afterCreated.push(function(item) {
         // console.info("after created");
 
         if (scope.list !== undefined) {
@@ -52,16 +52,16 @@ app.factory('list', ['$compile', 'crud', function($compile, crud) {
           //scope.init();
         }
         scope.closeEdit();
-      };
+      });
 
       // before Updated
-      scope.beforeUpdate = function() {
+      scope.beforeUpdate.push(function() {
         // console.info("before update");
         return true;
-      };
+      });
 
       // after Updated
-      scope.afterUpdated = function(item) {
+      scope.afterUpdated.push(function(item) {
         // console.info("after updated");
 
         for(var key in scope.itemModel) {
@@ -72,18 +72,18 @@ app.factory('list', ['$compile', 'crud', function($compile, crud) {
           //scope.init();
         }
         scope.closeEdit();
-      };
+      });
 
       // before deleted
-      scope.beforeDelete = function() {
+      scope.beforeDelete.push(function() {
         // console.info("before delete");
         return true;
-      };
+      });
 
       // after deleted
-      scope.afterDeleted = function(item) {
+      scope.afterDeleted.push(function(item) {
         // console.info("after deleted");
-      };
+      });
       
       // close edit panel
       scope.closeEdit = function() {
