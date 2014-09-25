@@ -377,12 +377,14 @@ app.factory('crud', ['$http', '$compile', '$animate', '$q', function($http, $com
           Util.showIosNotify('processing...');
 
           if (Util.isArray(scope.itemDel)) {
+            var authenticity_token = $("meta[name='csrf-token']").attr('content');
+
             // delete multiple rows 
             var p = $http({
               method: 'DELETE',
               headers: {'Content-Type': 'application/json'},
-              data: {items: scope.itemDel},
-              url: Util.getController() + '/multi_delete'
+              data: {items: scope.itemDel, authenticity_token: authenticity_token},
+              url: Util.getController() + '/bulk_delete'
             });
             p.success(function(response){
               if (response.code == "0") {
@@ -398,6 +400,7 @@ app.factory('crud', ['$http', '$compile', '$animate', '$q', function($http, $com
               }
             })
             p.error(function(response, status) {
+              Util.hideIosNotify();
               Util.notify('系统错误，请联系管理员', 'error');
             })
 

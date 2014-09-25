@@ -5,6 +5,7 @@ class CreateAdminUsers < ActiveRecord::Migration
       t.string :password
       t.string :name, null: true 
       t.integer :dept_id
+      t.integer :is_deleted, default: 0
 
       t.timestamps
     end

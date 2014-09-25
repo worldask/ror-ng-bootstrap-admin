@@ -15,6 +15,7 @@ ActiveRecord::Schema.define(version: 20140911092147) do
 
   create_table "admin_depts", force: true do |t|
     t.string   "name"
+    t.integer  "is_deleted", default: 0
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -24,6 +25,7 @@ ActiveRecord::Schema.define(version: 20140911092147) do
     t.string   "password"
     t.string   "name"
     t.integer  "dept_id"
+    t.integer  "is_deleted", default: 0
     t.datetime "created_at"
     t.datetime "updated_at"
   end

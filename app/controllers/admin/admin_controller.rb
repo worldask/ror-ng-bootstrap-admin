@@ -1,18 +1,21 @@
 class Admin::AdminController < ApplicationController
+  def model
+    controller_name.classify.constantize
+  end
+
   def index
   end
 
   def list 
-    model = controller_name.classify.constantize
     data = {:title => model.title}
     page = params[:page] == nil ? 1 : params[:page]
 
     if (params[:keyword].nil?) 
-      count = model.count
-      data[:list] = {:data => model.page(params[:page]).per(4)}
+      count = model.where(is_deleted: 0).count
+      data[:list] = {:data => model.where(is_deleted: 0).order(id: :desc).page(params[:page]).per(4)}
     else 
-      count = model.where("name like ?", '%' +  params[:keyword] + '%').count
-      data[:list] = {:data => model.where("name like ?", "%#{params[:keyword]}%").page(params[:page]).per(4)}
+      count = model.where(is_deleted: 0).where("name like ?", '%' +  params[:keyword] + '%').count
+      data[:list] = {:data => model.where(is_deleted: 0).where("name like ?", "%#{params[:keyword]}%").order(id: :desc).page(params[:page]).per(4)}
       data[:list][:keyword] = params[:keyword]
     end 
 
@@ -28,7 +31,6 @@ class Admin::AdminController < ApplicationController
   end
 
   def create 
-    model = controller_name.classify.constantize
     @model = model.new
 
     params[model.model_name.singular].each {|k, v|
@@ -42,7 +44,6 @@ class Admin::AdminController < ApplicationController
   end
 
   def update
-    model = controller_name.classify.constantize
     @model = model::find(params[:id])
 
     params[model.model_name.singular].each {|k, v|
@@ -56,12 +57,18 @@ class Admin::AdminController < ApplicationController
   end
 
   def destroy 
-    model = controller_name.classify.constantize
     @model = model::find(params[:id])
-    @model.destroy
+    @model.update(:is_deleted => 1)
 
     render json: {code: 1, desc: '删除成功！'}
   end
+
+  def bulk_delete
+    model.where(:id => JSON.parse(params[:items])).update_all(:is_deleted => 1)
+
+    render json: {code: 1, desc: '删除成功！'}
+  end
+  
 
   layout :choose_layout
 
