@@ -1,6 +1,37 @@
-%a.list-group-item{:href => "#group_1", "data-parent" => "#menu_bar", "data-toggle" => "collapse"} 会员管理
-%a.list-group-item{:href => "#group_2", "data-parent" => "#menu_bar", "data-toggle" => "collapse"} 系统设置
-.panel-collapse.collapse.in#group_2
-  .list-group
-    %a.list-group-item{:href => "users", :controller => "users"} 后台用户管理
-    %a.list-group-item{:href => "depts", :controller => "depts"} 部门管理
+.toggle-sidebar
+  %a{:href => "#"}
+    %i.fa.fa-arrows-h
+.slimScrollDiv
+  %ul#sideNav.nav.nav-pills.nav-stacked.show-arrows
+    %li
+      %a{:href => "javascript:void(0);"}
+        %span.txt 首页 
+    %li
+      %a{:href => "javascript:void(0);"}
+        %span.txt 会员管理
+        %span.label 10
+    %li.hasSub.highlight-menu
+      %a.expand{:href => "javascript:void(0);"}
+        %span.txt 系统设置
+        %span.caret.sideNav-arrow
+      %ul.sub.show.dn
+        %li
+          %a{:href => "/admin/users"}
+            %span.txt 后台用户管理
+        %li
+          %a{:href => "/admin/depts"}
+            %span.txt 后台部门管理
+    %li.hasSub
+      %a.notExpand{:href => "javascript:void(0);"}
+        %span.txt Tables
+      %ul.sub
+        %li
+          %a{:href => "tables.html"}
+            %span.txt Static tables
+-#
+  %a.list-group-item{:href => "#group_1", "data-parent" => "#menu_bar", "data-toggle" => "collapse"} 会员管理
+  %a.list-group-item{:href => "#group_2", "data-parent" => "#menu_bar", "data-toggle" => "collapse"} 系统设置
+  .panel-collapse.collapse.in#group_2
+    .list-group
+      %a.list-group-item{:href => "users", :controller => "users"} 后台用户管理
+      %a.list-group-item{:href => "depts", :controller => "depts"} 部门管理

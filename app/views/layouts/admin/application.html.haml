@@ -13,10 +13,10 @@
       = render :file => "layouts/admin/head"
       .row
         -# 左侧菜单
-        .col-md-2
+        %aside#sidebar.col-md-2.class.visible-md-block.visible-lg-block.hidden-print
           = render :file => "layouts/admin/menu"
         -# 主界面
-        .col-md-10
+        .col-xs-12.col-sm-12.col-md-10.col-lg-10
           #content_for_layout
             -# {"ng-view" => true}
             = render :file => "layouts/admin/index"
