@@ -78,8 +78,7 @@ app.factory('crud', ['$http', '$compile', '$animate', '$q', function($http, $com
                   (scope.afterCreated[i])(item);
                 }
                 Util.notify(response.desc);
-                element.find('#panel-list').removeClass('dn').addClass('db');
-                element.find('#panel-edit').removeClass('db').addClass('dn');
+                scope.showList();
               } else {
                 Util.notify(response.desc, 'error');
               }
@@ -96,8 +95,7 @@ app.factory('crud', ['$http', '$compile', '$animate', '$q', function($http, $com
                 (scope.afterUpdated[i])(response);
               }
               Util.notify(response.desc);
-              element.find('#panel-list').removeClass('dn').addClass('db');
-              element.find('#panel-edit').removeClass('db').addClass('dn');
+              scope.showList();
             } else {
               Util.notify(response.desc, 'error');
             }
@@ -118,8 +116,7 @@ app.factory('crud', ['$http', '$compile', '$animate', '$q', function($http, $com
                 (scope.afterDeleted[i])(response);
               }
               Util.notify(response.desc);
-              element.find('#panel-list').removeClass('dn').addClass('db');
-              element.find('#panel-edit').removeClass('db').addClass('dn');
+              scope.showList();
             } else {
               Util.notify(response.desc, 'error');
             }
@@ -150,27 +147,15 @@ app.factory('crud', ['$http', '$compile', '$animate', '$q', function($http, $com
         scope.editingItem = item;
         scope.itemModel = angular.copy(item);
 
-        element.find('#panel-list').removeClass('db').addClass('dn');
-        element.find('#panel-edit').removeClass('dn').addClass('db');
+        scope.showEdit();
 
         element.find("#editForm .has-success").removeClass("has-success");
         element.find("#editForm .has-error").removeClass("has-error");
-        //$animate.setClass(element.find("#panel-list"), 'db', 'dn')
-        //.then($animate.setClass(element.find("#panel-edit"), 'dn', 'db'));
+        //$animate.setClass(element.find("#panel-list"), 'show', 'hidden')
+        //.then($animate.setClass(element.find("#panel-edit"), 'hidden', 'show'));
         //.then(function() {
         //  console.log('entered');
         //});
-        //  // after animating, focus to the first textbox and select all text
-        //  $("#panel-edit :text").first().focus();
-        //  $("#panel-edit :text").first().select();
-
-        // save when press enter
-        $("#panel-edit .form-control").off('keydown');
-        $("#panel-edit .form-control").on('keydown', function(e){
-          if (e.keyCode == 13){
-            scope.save();
-          }
-        });
       };
 
       scope.uniqueCount = 0;
@@ -413,6 +398,16 @@ app.factory('crud', ['$http', '$compile', '$animate', '$q', function($http, $com
             scope.write(Util.getController(), 'destroy', data, scope.itemDel);
           }
         }
+      };
+
+      scope.showList = function() {
+        element.find('#panel-edit').removeClass('show').addClass('hidden');
+        element.find('#panel-list').removeClass('hidden').addClass('show');
+      };
+
+      scope.showEdit = function() {
+        element.find('#panel-list').removeClass('show').addClass('hidden');
+        element.find('#panel-edit').removeClass('hidden').addClass('show');
       };
 
       /**

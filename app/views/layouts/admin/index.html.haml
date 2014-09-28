@@ -1,5 +1,5 @@
 %div{"ng-controller" => "#{params[:controller].camelize}Controller", "ng-init" => "init()"}
-  #panel-list.db.panel.panel-default
+  #panel-list.show.panel.panel-default
     .panel-heading
       %h4
         %i.fa.fa-list.fa-lg{"ng-bind" => "' ' + title"}
@@ -34,7 +34,7 @@
       .text-center{"ng-if" => "list.data.length == 0"}
         %code 没有数据
 
-  #panel-edit.dn.panel.panel-primary
+  #panel-edit.hidden.panel.panel-primary
     .modal-header.label-primary
       %a.close{:title => "关闭", "ng-click" => "closeEdit();"} &times;
       %h4

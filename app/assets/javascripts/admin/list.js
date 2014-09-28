@@ -87,8 +87,7 @@ app.factory('list', ['$compile', 'crud', function($compile, crud) {
       
       // close edit panel
       scope.closeEdit = function() {
-        $element.find('#panel-list').removeClass('dn').addClass('db');
-        $element.find('#panel-edit').removeClass('db').addClass('dn');
+        scope.showList();
       };
 
       // close edit panel when pressing ESC
