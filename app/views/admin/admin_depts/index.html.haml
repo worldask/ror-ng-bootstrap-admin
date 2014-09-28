@@ -5,7 +5,7 @@
     %a#btnBatchDelete.btn.btn-danger{:title => "批量删除", "ng-click" => "bulkDelete(selection);"}
       %i.fa.fa-trash-o
   .col-lg-4.input-group.pull-right
-    %input.form-control{:type => "text", :name => "q", :placeholder => "请输入搜索关键字", "ng-model" => "list.keyword"}
+    %input.form-control{:type => "text", :name => "q", :placeholder => "请输入搜索关键字", "ng-model" => "list.keyword", "ng-keyup" => "$event.keyCode === 13 && search(list.keyword);"}
     %span.input-group-btn
       %a.btn.btn-primary{:title => "搜索", "ng-click" => "search(list.keyword);"}
         %i.fa.fa-search

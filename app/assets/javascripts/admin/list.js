@@ -117,18 +117,9 @@ app.factory('list', ['$compile', 'crud', function($compile, crud) {
       // search
       scope.search = function(keyword) {
         if (angular.isDefined(keyword) && keyword !== null && keyword !== '') {
-          //scope.read(Util.getController(), 'list', '?s={"keyword": "' + keyword + '"}');
           scope.read(Util.getController(), 'list', '?keyword=' + keyword);
         } 
       };
-      // search when pressing enter
-      $("#panel-list input[name=q]").off('keydown');
-      $("#panel-list input[name=q]").on('keydown', function(e) {
-        if (e.keyCode == 13) {
-          scope.search(this.value);
-          this.select();
-        }
-      });
 
       // init 
       scope.init = function() {
