@@ -34,7 +34,7 @@
       .text-center{"ng-if" => "list.data.length == 0"}
         %code 没有数据
 
-  #panel-edit.hidden.panel.panel-primary
+  #panel-edit.hidden.panel.panel-primary{"auto-focus" => true}
     .modal-header.label-primary
       %a.close{:title => "关闭", "ng-click" => "closeEdit();"} &times;
       %h4

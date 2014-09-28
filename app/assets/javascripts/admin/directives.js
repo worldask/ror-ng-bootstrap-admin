@@ -84,3 +84,24 @@ app.directive('pagination', ['$compile', function($compile) {
     link: link
   };
 }]);
+
+// auto focus and select first textbox when open edit panel
+app.directive('autoFocus', ['$timeout', function($timeout) {
+  function link(scope, element, attrs) {
+    var focusTo = function() {
+      $timeout(function() {
+        element.find('input:text')[0].focus();
+        element.find('input:text')[0].select();
+      }, 50);
+    };
+    var getClass = function() {
+      return element.attr('class');
+    };
+    scope.$watch(getClass, focusTo);
+  }
+
+  return {
+    restrict: 'AE',
+    link: link
+  };
+}]);
