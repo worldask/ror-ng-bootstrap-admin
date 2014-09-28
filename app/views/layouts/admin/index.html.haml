@@ -42,7 +42,7 @@
 
     .panel-body
       %input#hidePrimaryKeyID{:type => "hidden", :value => "{{itemModel.id}}"}
-      %form#editForm.form-horizontal
+      %form#editForm.form-horizontal{"ng-keyup" => "$event.keyCode === 13 && save();"}
         -# 表单
         = yield :edit_form_controls
 
