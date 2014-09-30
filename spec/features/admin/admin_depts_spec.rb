@@ -16,6 +16,8 @@ feature AdminDept, :type => :feature, :js => true do
       let(:keyword_part)             { @keyword_part }
       let(:keyword_part_match_count) { 2 }
       let(:keyword_whole)            { @row1[:name] }
+      let(:add_field)            { 'id="name"' }
+      let(:add_value)            { '新部门' }
     end
 
   context '编辑' do
@@ -23,27 +25,6 @@ feature AdminDept, :type => :feature, :js => true do
       AdminDept.create! @data
       visit admin_depts_path
       sleep 0.1
-    end
-
-    describe '添加一个部门' do
-      it '记录条数应加1' do
-        find('a[title="添加"]').click
-        find('input[id="name"]').set '新部门'
-        find('a[title="保存"]').click
-        sleep 0.1
-
-        expect(page).to have_selector('table tbody tr', count: @data.length + 1)
-      end
-    end
-
-    describe '删除一个部门' do
-      it '记录条数应减1' do
-        all('a[title="删除"]').first.click
-        find('a[ng-click="del();"]').click
-        sleep 0.1
-
-        expect(page).to have_selector('table tbody tr', count: @data.length - 1)
-      end
     end
 
     describe '删除指定部门' do

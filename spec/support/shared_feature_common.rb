@@ -15,12 +15,12 @@
 #  end
 
 shared_examples 'shared_feature_common' do |path|
-  context 'search' do
-    before(:each) do
-      described_class.create! hash_array
-      visit path
-    end
+  before(:each) do
+    described_class.create! hash_array
+    visit path
+  end
 
+  context 'search' do
     describe '搜索 <keyword_whole>' do
       it '记录条数应为 1' do
         find(:xpath, "//input[@name='q']").set keyword_whole
@@ -58,6 +58,19 @@ shared_examples 'shared_feature_common' do |path|
         sleep 0.1
 
         expect(page).to have_selector('table tbody tr', count: hash_array.length)
+      end
+    end
+  end
+
+  context 'edit' do
+    describe 'add a row' do
+      it 'row count should plus 1' do
+        find('a[ng-click="edit({});"]').click
+        find("input[#{add_field}]").set add_value
+        find('a[ng-click="save();"]').click
+        sleep 0.1
+
+        expect(page).to have_selector('table tbody tr', count: @data.length + 1)
       end
     end
   end
