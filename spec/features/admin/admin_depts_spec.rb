@@ -10,14 +10,13 @@ feature AdminDept, :type => :feature, :js => true do
     ]
   end
 
-  context '搜索' do
-    it_behaves_like 'feature_search', '/admin/depts' do
-      let(:hash_array)                 { @data }
+    it_behaves_like 'shared_feature_common', '/admin/depts' do
+      # search
+      let(:hash_array)               { @data }
       let(:keyword_part)             { @keyword_part }
       let(:keyword_part_match_count) { 2 }
       let(:keyword_whole)            { @row1[:name] }
     end
-  end
 
   context '编辑' do
     before(:each) do
