@@ -11,7 +11,7 @@ feature AdminDept, :type => :feature, :js => true do
 
   context '搜索' do
     it_behaves_like 'feature_search', '/admin/depts' do
-      let(:hash_ary)                 { @depts }
+      let(:hash_array)                 { @depts }
       let(:keyword_part)             { 'dept' }
       let(:keyword_part_match_count) { 2 }
       let(:keyword_whole)            { 'tech dept' }
