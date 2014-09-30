@@ -14,7 +14,7 @@
 #    end
 #  end
 
-shared_examples 'shared search feature examples' do |path|
+shared_examples 'feature_search' do |path|
   before(:each) do
     described_class.create! hash_ary
     visit path

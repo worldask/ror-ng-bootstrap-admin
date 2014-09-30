@@ -10,7 +10,7 @@ feature AdminDept, :type => :feature, :js => true do
   end
 
   context '搜索' do
-    it_behaves_like 'shared search feature examples', '/admin/depts' do
+    it_behaves_like 'feature_search', '/admin/depts' do
       let(:hash_ary)                 { @depts }
       let(:keyword_part)             { 'dept' }
       let(:keyword_part_match_count) { 2 }
