@@ -48,52 +48,6 @@ app.factory('validation', [function() {
 
         return result;
       };
-
-      //  var controls = $("#editForm input[unique]");
-      //  scope.uniqueCount = controls.length;
-
-      //  if (controls.length > 0) {
-      //    for (var i = 0; i < controls.length; i++) {
-      //      var err = scope.checkUnique($(controls[i]),
-      //        scope.itemModel[scope.primaryKey],
-      //        $(controls[i]).attr('id'),
-      //        $(controls[i]).val().trim());
-      //    }
-      //  } 
-
-      //scope.uniqueCount = 0;
-
-      //scope.checkUnique = function(formControl, primaryKey, model, value) {
-      //  var params = '?eq={"' + model + '":"' + value + '"}';
-      //  if (primaryKey != undefined && primaryKey != '') {
-      //    params += '&noteq={"' + $("#primaryKey").val() + '":"' + primaryKey + '"}';
-      //  }
-
-      //  var p = $http({
-      //    method: 'GET',
-      //    url: Util.getController() + '/get_count' + params,
-      //  });
-
-      //  p.success(function(response) {
-      //    if (response !== 0) {
-      //      formControl.parent().removeClass('has-success');
-      //      formControl.parent().addClass('has-error');
-      //      formControl.focus();
-      //      return;
-      //    } else {
-      //      formControl.parent().removeClass('has-error');
-      //      formControl.parent().addClass('has-success');
-      //    }
-
-      //    scope.uniqueCount -= 1;
-
-      //    if (scope.uniqueCount <= 0) {
-      //      Util.showIosNotify('Loading...');
-      //      scope.saveCommit();
-      //    }
-      //  });
-      //}
-
     }
   };
 }]);

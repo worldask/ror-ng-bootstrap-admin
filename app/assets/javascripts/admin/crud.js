@@ -184,13 +184,6 @@ app.factory('crud', ['$http', '$compile', '$animate', '$q', 'validation', functi
           }
         }
 
-        // validate unique fields
-        if (angular.isDefined(scope.checkUnique)) {
-          if (scope.checkUnique() === false) {
-            return false;
-          }
-        }
-
         Util.showIosNotify('Saving...');
         scope.saveCommit();
       };

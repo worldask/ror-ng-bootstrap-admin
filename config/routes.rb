@@ -22,13 +22,10 @@ Rails.application.routes.draw do
     concern :bulk_delete do
       delete 'bulk_delete', on: :collection
     end
-    concern :is_unique do
-      get 'is_unique', on: :collection
-    end
 
-    resources :users, :controller => 'admin_users', concerns: [:list, :bulk_delete, :is_unique]
-    resources :depts, :controller => 'admin_depts', concerns: [:list, :bulk_delete, :is_unique]
-    resources :roles, :controller => 'admin_roles', concerns: [:list, :bulk_delete, :is_unique]
+    resources :users, :controller => 'admin_users', concerns: [:list, :bulk_delete]
+    resources :depts, :controller => 'admin_depts', concerns: [:list, :bulk_delete]
+    resources :roles, :controller => 'admin_roles', concerns: [:list, :bulk_delete]
   end
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
