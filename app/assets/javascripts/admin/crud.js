@@ -3,7 +3,7 @@ app.factory('crud', ['$http', '$compile', '$animate', '$q', 'validation', functi
 
   return {
     extend: function(scope, element) {
-      validation.extend(scope, $element);
+      validation.extend(scope, element);
 
       document.title = '';
       scope.title = '';
@@ -160,6 +160,41 @@ app.factory('crud', ['$http', '$compile', '$animate', '$q', 'validation', functi
         //});
       };
 
+      scope.save = function() {
+        var i, beforeResult = true;
+
+        // before Create/Update
+        if (scope.itemModel[scope.primaryKey]) {
+          for (i = 0; i < scope.beforeUpdate.length; i++) {
+            beforeResult = beforeResult && (scope.beforeUpdate[i])();
+          }
+        } else {
+          for (i = 0; i < scope.beforeCreate.length; i++) {
+            beforeResult = beforeResult && (scope.beforeCreate[i])();
+          }
+        }
+        if (beforeResult === false) {
+          return false;
+        }
+
+        // validate required fields
+        if (angular.isDefined(scope.validate)) {
+          if (scope.validate() === false) {
+            return false;
+          }
+        }
+
+        // validate unique fields
+        if (angular.isDefined(scope.checkUnique)) {
+          if (scope.checkUnique() === false) {
+            return false;
+          }
+        }
+
+        Util.showIosNotify('Saving...');
+        scope.saveCommit();
+      };
+
       scope.saveCommit = function() {
         var item = {};
         var data = {};
@@ -192,46 +227,6 @@ app.factory('crud', ['$http', '$compile', '$animate', '$q', 'validation', functi
           scope.write(Util.getController(), 'edit', data, item);
         } else {
           scope.write(Util.getController(), 'create', data, item);
-        }
-      };
-
-      scope.save = function() {
-        var i, beforeResult = true;
-
-        if (scope.itemModel[scope.primaryKey]) {
-          for (i = 0; i < scope.beforeUpdate.length; i++) {
-            beforeResult = beforeResult && (scope.beforeUpdate[i])();
-          }
-        } else {
-          for (i = 0; i < scope.beforeCreate.length; i++) {
-            beforeResult = beforeResult && (scope.beforeCreate[i])();
-          }
-        }
-        if (beforeResult === false) {
-          return false;
-        }
-
-        // validate required fields
-        if (angular.isDefined(scope.validate)) {
-          if (scope.validate() === false) {
-            return;
-          }
-        }
-
-        // validate unique fields
-        var controls = $("#editForm input[unique]");
-        scope.uniqueCount = controls.length;
-
-        if (controls.length > 0) {
-          for (var i = 0; i < controls.length; i++) {
-            var err = scope.checkUnique($(controls[i]),
-              scope.itemModel[scope.primaryKey],
-              $(controls[i]).attr('id'),
-              $(controls[i]).val().trim());
-          }
-        } else {
-          Util.showIosNotify('Saving...');
-          scope.saveCommit();
         }
       };
 
