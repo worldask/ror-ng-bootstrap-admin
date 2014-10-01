@@ -107,6 +107,7 @@ gulp.task('css', ['clean', 'scss'], function () {
 gulp.task('js_admin_app', function () {
   var files = [
     'app/assets/javascripts/admin/root.js',
+    'app/assets/javascripts/admin/validation.js',
     'app/assets/javascripts/admin/crud.js',
     'app/assets/javascripts/admin/filters.js',
     'app/assets/javascripts/admin/directives.js',
@@ -116,9 +117,9 @@ gulp.task('js_admin_app', function () {
   return gulp.src(files)
   .pipe(jshint())
   //.pipe(jshint.reporter('js'))
-  .pipe(uglify())
-  .pipe(ngmin())
-  .pipe(concat('app.js'))
+  //.pipe(uglify())
+  //.pipe(ngmin())
+  //.pipe(concat('app.js'))
   .pipe(gulp.dest(paths.dest_admin_dev))
   .pipe(gulp.dest(paths.dest_admin));
 });
@@ -126,6 +127,7 @@ gulp.task('js_admin_app', function () {
 gulp.task('js_admin', function () {
   var files = [paths.js_admin, 
     '!app/assets/javascripts/admin/root.js',
+    '!app/assets/javascripts/admin/validation.js',
     '!app/assets/javascripts/admin/crud.js',
     '!app/assets/javascripts/admin/filters.js',
     '!app/assets/javascripts/admin/directives.js',

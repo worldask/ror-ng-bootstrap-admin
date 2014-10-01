@@ -1,8 +1,10 @@
-app.factory('crud', ['$http', '$compile', '$animate', '$q', function($http, $compile, $animate, $q) {
+app.factory('crud', ['$http', '$compile', '$animate', '$q', 'validation', function($http, $compile, $animate, $q, validation) {
   'use strict';
 
   return {
     extend: function(scope, element) {
+      validation.extend(scope, $element);
+
       document.title = '';
       scope.title = '';
       scope.primaryKey = '';
@@ -158,39 +160,6 @@ app.factory('crud', ['$http', '$compile', '$animate', '$q', function($http, $com
         //});
       };
 
-      scope.uniqueCount = 0;
-
-      scope.checkUnique = function(formControl, primaryKey, model, value) {
-        var params = '?eq={"' + model + '":"' + value + '"}';
-        if (primaryKey != undefined && primaryKey != '') {
-          params += '&noteq={"' + $("#primaryKey").val() + '":"' + primaryKey + '"}';
-        }
-
-        var p = $http({
-          method: 'GET',
-          url: Util.getController() + '/get_count' + params,
-        });
-
-        p.success(function(response) {
-          if (response !== 0) {
-            formControl.parent().removeClass('has-success');
-            formControl.parent().addClass('has-error');
-            formControl.focus();
-            return;
-          } else {
-            formControl.parent().removeClass('has-error');
-            formControl.parent().addClass('has-success');
-          }
-
-          scope.uniqueCount -= 1;
-
-          if (scope.uniqueCount <= 0) {
-            Util.showIosNotify('Loading...');
-            scope.saveCommit();
-          }
-        });
-      }
-
       scope.saveCommit = function() {
         var item = {};
         var data = {};
@@ -264,47 +233,6 @@ app.factory('crud', ['$http', '$compile', '$animate', '$q', function($http, $com
           Util.showIosNotify('Saving...');
           scope.saveCommit();
         }
-      };
-
-      scope.validate = function() {
-        var result = true;
-        var value = '';
-        var controlName = '';
-
-        var controls = $("#editForm [required]");
-        for (var i = 0; i < controls.length; i++) {
-          // trim first
-          value = $(controls[i]).val().trim();
-
-          if (value == '' || value == '? undefined:undefined ?' || value == '?') {
-            Util.focus($(controls[i]));
-            if (controls[i].type == 'text') {
-              controls[i].select();
-            }
-            controlName = $(controls[i]).attr("placeholder");
-            if (!angular.isUndefined(controlName) && controlName != '') {
-              Util.notify("请输入" + controlName, 'error');
-            }
-
-            return false;
-          }
-        }
-
-        var controls = $("#editForm input[numeric]");
-        for (var i = 0; i < controls.length; i++) {
-          // NAN
-          if (isNaN($(controls[i]).val().trim())) {
-            Util.focus($(controls[i]));
-            controls[i].select();
-            controlName = $(controls[i]).attr("placeholder");
-            if (!angular.isUndefined(controlName) && controlName != '') {
-              Util.notify(controlName + "请输入数字", 'error');
-            }
-            return false;
-          }
-        }
-
-        return result;
       };
 
       scope.bulkDelete = function(selection) {
@@ -409,85 +337,6 @@ app.factory('crud', ['$http', '$compile', '$animate', '$q', function($http, $com
         element.find('#panel-list').removeClass('show').addClass('hidden');
         element.find('#panel-edit').removeClass('hidden').addClass('show');
       };
-
-      /**
-       * batchUpdate 专属的 write (后期应考虑与 scope.write 整合)
-       * @param {
-       *      method     : method name
-       *      data       : http post data
-       *      item       : item object
-       *      next       : next after http success
-       *      sucess     : call back after http sucess [可选]
-       * }
-       */
-      scope.writeForBatchUpdate = function(options) {
-        var p = $http({
-          method: 'POST',
-          url: Util.controller + '/' + options.method,
-          headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-          data: options.data,
-        });
-
-        p.success(function(response, status){
-          if (options.success) {
-            options.success(options.item);
-            Util.notify('更新成功');
-          }
-          options.next();
-        });
-
-        p.error(function(response, status) {
-          Util.hideIosNotify('Error');
-        });
-      }
-
-      /**
-       * 批量更新
-       *
-       * @param {
-       *   selection  : selected item collection
-       *   method     : method name
-       *   fnBefore   : call back before batch update
-       *   fnAfter    : call back after batch update
-       *   fnEach     : call back after each success
-       * }
-       */
-      scope.batchUpdate = function(options) {
-        var cancel = true;
-        var items = [];
-
-        for(var key in options.selection) {
-          items.push(options.selection[key]);
-        }
-
-        var fnDone = function() {
-          Util.hideIosNotify('success', 'img/cross.png');
-          options.fnAfter && options.fnAfter();
-        }
-
-        var index = 0;
-        var fnContinue = function() {
-          if (index <= items.length) {
-            var item = items[index];
-            if (index === 0) {
-              Util.showIosNotify('Loading...')
-            }
-            index++;
-
-            scope.writeForBatchUpdate({
-              method      : options.method,
-              data        : scope.primaryKey + '=' + item[scope.primaryKey],
-              item        : item,
-              next        : (index >= items.length) ? fnDone : fnContinue,
-              success     : options.fnEach,
-            });
-          }
-        }
-
-        if (options.fnBefore !== undefined && options.fnBefore !== null) {
-          options.fnBefore(fnContinue);
-        }
-      }
     }
   };
 }]);
