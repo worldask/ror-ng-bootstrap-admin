@@ -28,13 +28,13 @@
 
     -# load scripts
     %script{:src => "/assets/admin/vendor.js"}
-    -#%script{:src => "/assets/admin/app.js"}
-    %script{:src => "/assets/admin/root.js"}
-    %script{:src => "/assets/admin/validation.js"}
-    %script{:src => "/assets/admin/crud.js"}
-    %script{:src => "/assets/admin/filters.js"}
-    %script{:src => "/assets/admin/directives.js"}
-    %script{:src => "/assets/admin/util.js"}
+    %script{:src => "/assets/admin/app.js"}
+    -#%script{:src => "/assets/admin/root.js"}
+      %script{:src => "/assets/admin/validation.js"}
+      %script{:src => "/assets/admin/crud.js"}
+      %script{:src => "/assets/admin/filters.js"}
+      %script{:src => "/assets/admin/directives.js"}
+      %script{:src => "/assets/admin/util.js"}
     - if params[:action] == 'tree'
       %script{:src => "/assets/admin/tree.js"}
     - else params[:action] == 'index' 

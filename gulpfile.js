@@ -119,7 +119,7 @@ gulp.task('js_admin_app', function () {
   //.pipe(jshint.reporter('js'))
   //.pipe(uglify())
   //.pipe(ngmin())
-  //.pipe(concat('app.js'))
+  .pipe(concat('app.js'))
   .pipe(gulp.dest(paths.dest_admin_dev))
   .pipe(gulp.dest(paths.dest_admin));
 });
