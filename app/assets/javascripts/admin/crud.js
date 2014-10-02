@@ -82,7 +82,7 @@ app.factory('crud', ['$http', '$compile', '$animate', '$q', 'validation', functi
                 Util.notify(response.desc);
                 scope.showList();
               } else {
-                Util.notify(response.desc, 'error');
+                Util.notify(split_error_message(response.desc), 'error');
               }
             };
             break;
@@ -324,6 +324,18 @@ app.factory('crud', ['$http', '$compile', '$animate', '$q', 'validation', functi
       scope.showEdit = function() {
         element.find('#panel-list').removeClass('show').addClass('hidden');
         element.find('#panel-edit').removeClass('hidden').addClass('show');
+      };
+
+      var split_error_message = function(message) {
+        var result = '';
+
+        if (angular.isDefined(message)) {
+          angular.forEach(message, function(value, index) {
+            result += index + ' ' + value;
+          });
+        }
+
+        return result;
       };
     }
   };
