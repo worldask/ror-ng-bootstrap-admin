@@ -1,9 +1,5 @@
 - content_for :list_toolbar do
-  .col-lg-8.input-group.pull-left
-    = render "admin/shared/btn_add"
-    = render "admin/shared/btn_bulk_delete"
-  .col-lg-4.input-group.pull-right
-    = render "admin/shared/toolbar_search"
+  = render "admin/shared/toolbar_normal"
 
 - content_for :list_thead do
   %th.text-center 名称
