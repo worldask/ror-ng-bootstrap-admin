@@ -99,7 +99,7 @@ app.factory('crud', ['$http', '$compile', '$animate', '$q', 'validation', functi
               Util.notify(response.desc);
               scope.showList();
             } else {
-              Util.notify(response.desc, 'error');
+              Util.notify(split_error_message(response.desc), 'error');
             }
           };
           break;

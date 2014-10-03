@@ -54,9 +54,14 @@ class Admin::AdminController < ApplicationController
     params[model.model_name.singular].each {|k, v|
       @model[k] = v
     }
-    @model.save
+    if (@model.valid?) 
+      @model.save
+      result = {code: 1, desc: '保存成功！', id: @model.id}
+    else
+      result = {code: -1, desc: @model.errors.messages}
+    end
 
-    render json: {code: 1, desc: '保存成功！'}
+    render json: result
     # $search_field = $this->search_field;
     # AdminLog::write(Auth::user()->username, $this->title . '编辑' . $this->search_field . '=' . $item->$search_field, Request::getClientIp(), date('Y-m-d H:i:s', time()));
   end
