@@ -17,8 +17,6 @@
   %td{"ng-bind" => "item.name"}
 
 - content_for :list_buttons do
-  %a.btn.btn-sm.btn-primary{:title => "授权", "ng-click" => "editMenu(item);"}
-    %i.fa.fa-user.fa-lg
   %a.btn.btn-sm.btn-primary{:title => "编辑", "ng-click" => "edit(item);"}
     %i.fa.fa-edit.fa-lg
   %a.btn.btn-sm.btn-danger{:title => "删除", "ng-click" => "delConfirm(item);"}
