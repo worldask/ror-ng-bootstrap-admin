@@ -12,8 +12,9 @@ module ActiveRecordExtension
         count = self.where(is_deleted: 0).count
         data[:list] = {:data => self.where(is_deleted: 0).order(id: :desc).page(params[:page]).per(4)}
       else 
-        count = self.where(is_deleted: 0).where("name like ?", "%#{params[:keyword]}%").count
-        data[:list] = {:data => self.where(is_deleted: 0).where("name like ?", "%#{params[:keyword]}%").order(id: :desc).page(params[:page]).per(4)}
+        search_result = resolve_search_fields(self.search_fields, params[:keyword])
+        count = self.where(is_deleted: 0).where(search_result[:where], search_result[:params]).count
+        data[:list] = {:data => self.where(is_deleted: 0).where(search_result[:where], search_result[:params]).order(id: :desc).page(params[:page]).per(4)}
         data[:list][:keyword] = params[:keyword]
       end 
 
@@ -73,6 +74,18 @@ module ActiveRecordExtension
 
       {code: 1, desc: '删除成功！'}
     end
+
+    private
+      def resolve_search_fields(fields, keyword)
+        result = {:where => '', :params => {}}
+
+        fields.each{|f|
+          result[:where].empty? ? result[:where] += "#{f} like :#{f}" : result[:where] += " or #{f} like :#{f}"
+          result[:params][f.to_sym] = "%#{keyword}%"
+        }
+
+        result
+      end
   end
 end
 
