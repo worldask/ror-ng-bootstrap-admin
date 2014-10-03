@@ -67,7 +67,17 @@ shared_examples 'shared_feature_list' do |path|
     #end
   end
 
-  context 'cud' do
+  context 'create' do
+    describe 'add a row validating required fields' do
+      it 'reqired textbox should be with error style' do
+        find('a[ng-click="edit({});"]').click
+        find('a[ng-click="save();"]').click
+        sleep 0.1
+
+        expect(page).to have_selector('#editForm .has-error')
+      end
+    end
+
     describe 'add a row' do
       it 'row count should plus 1' do
         find('a[ng-click="edit({});"]').click
@@ -97,7 +107,9 @@ shared_examples 'shared_feature_list' do |path|
         expect(page).to have_selector('table tbody tr', count: @data.length * 2)
       end
     end
+  end
 
+  context 'edit' do
     describe 'edit a row' do
       it "field should be edited" do
         find(:xpath, "//table/tbody/tr/td[text()='#{@row1[@field1.to_sym]}']/../td[@class='text-center']/a[@ng-click='edit(item);']").click
@@ -108,7 +120,9 @@ shared_examples 'shared_feature_list' do |path|
         expect(page).to_not have_content @row1[@field1.to_sym]
       end
     end
+  end
 
+  context 'delete' do
     describe 'delete a row' do
       it 'row count should minus 1' do
         all('a[ng-click="delConfirm(item);"]').first.click
