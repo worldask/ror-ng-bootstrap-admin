@@ -5,7 +5,7 @@
 #  # spec/features/admin_xyzs_spec.rb
 #  describe AdminXyz
 #    context 'search' do
-#      it_behaves_like 'shared_feature_common', '/admin/xyzs' do
+#      it_behaves_like 'shared_feature_list', '/admin/xyzs' do
 #        let(:hash_array)               { @xyzs }          # hash array for creating model
 #        let(:keyword_part)             { 'part-of-word' } # partial keyword
 #        let(:keyword_complete)         { 'whole-word' }   # complete keyword, row count should be 1
@@ -13,7 +13,7 @@
 #    end
 #  end
 
-shared_examples 'shared_feature_common' do |path|
+shared_examples 'shared_feature_list' do |path|
   let(:hash_array)               { @data }
   let(:keyword_part)             { @keyword_part }
   let(:keyword_complete)         { @row1[@field1.to_sym] }
@@ -56,15 +56,15 @@ shared_examples 'shared_feature_common' do |path|
       end
     end
 
-    describe 'search empty string' do
-      it 'row count should be <hash_array.length>' do
-        find(:xpath, "//input[@name='q']").set ''
-        find(:xpath, "//a[@ng-click='search(list.keyword);']").click
-        sleep 0.1
+    #describe 'search empty string' do
+    #  it 'row count should be <hash_array.length>' do
+    #    find(:xpath, "//input[@name='q']").set ''
+    #    find(:xpath, "//a[@ng-click='search(list.keyword);']").click
+    #    sleep 0.1
 
-        expect(page).to have_selector('table tbody tr', count: hash_array.length)
-      end
-    end
+    #    expect(page).to have_selector('table tbody tr', count: hash_array.length)
+    #  end
+    #end
   end
 
   context 'cud' do

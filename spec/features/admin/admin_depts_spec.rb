@@ -11,6 +11,6 @@ feature AdminDept, :type => :feature, :js => true do
     ]
   end
 
-  it_behaves_like 'shared_feature_common', '/admin/depts' do
+  it_behaves_like 'shared_feature_list', '/admin/depts' do
   end
 end
