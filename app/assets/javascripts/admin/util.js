@@ -134,30 +134,6 @@ var Util = (function() {
     }
   }
 
-  //$(document).on("click", ".ios-notify-show", function(e) {
-  //  showIosNotify('请稍候...');
-  //  return false;
-  //});
-
-  // 高亮输入错误的文本框
-  var focus = function(editForm, err) {
-    if (err != '') {
-      // 更改样式为错误，并定位焦点
-      editForm.parent().removeClass('has-success');
-      editForm.parent().addClass('has-error');
-      editForm.focus();
-
-      // 重新绑定blur事件，如果有值则替换样式为成功
-      editForm.off('blur');
-      editForm.on('blur', function(){
-        if (err != '') {
-          editForm.parent().removeClass('has-error');
-          editForm.parent().addClass('has-success');
-        }
-      });
-    }
-  };
-
   var isArray = function(objAry) {
     return Object.prototype.toString.call(objAry) === '[object Array]' ? true : false;
   };

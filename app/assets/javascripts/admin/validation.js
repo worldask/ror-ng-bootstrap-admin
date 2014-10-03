@@ -1,6 +1,26 @@
 app.factory('validation', [function() {
   'use strict';
 
+  // 高亮输入错误的文本框
+  var setStyle = function(editForm, err) {
+    // 更改样式为错误，并定位焦点
+    editForm.parent().removeClass('has-success');
+    editForm.parent().addClass('has-error');
+    editForm.focus();
+
+    // 重新绑定blur事件，如果有值则替换样式为成功
+    editForm.off('blur');
+    editForm.on('blur', function(){
+      if (editForm.val().trim().length > 0) {
+        editForm.parent().removeClass('has-error');
+        editForm.parent().addClass('has-success');
+      } else {
+        editForm.parent().removeClass('has-success');
+        editForm.parent().addClass('has-error');
+      }
+    });
+  };
+
   return {
     extend: function(scope, element) {
       scope.validate = function() {
@@ -16,7 +36,7 @@ app.factory('validation', [function() {
           value = control.val().trim();
 
           if (value == '' || value == '? undefined:undefined ?' || value == '?') {
-            Util.focus(control);
+            setStyle(control);
             if (controls[i].type == 'text') {
               controls[i].select();
             }
@@ -36,7 +56,7 @@ app.factory('validation', [function() {
           value = control.val().trim();
 
           if (isNaN(value)) {
-            Util.focus(control);
+            setStyle(control);
             controls[i].select();
             controlName = control.attr("placeholder");
             if (!angular.isUndefined(controlName) && controlName != '') {
