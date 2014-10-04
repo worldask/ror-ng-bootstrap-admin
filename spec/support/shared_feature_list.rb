@@ -11,24 +11,18 @@
 #  end
 
 shared_examples 'shared_feature_list' do |path|
-  before(:all) do
-    @data = []
-    @add_values = []
-    @keyword_complete = ''
-  end
-
   before(:each) do
     @data = []
-    @add_values = []
+    @values = []
 
     # generate rows
     2.times { |row|
       row_data = {}
 
       # iterate each fields
-      @add_fields.each_with_index { |value, index|
+      @columns.each_with_index { |value, index|
         row_data[value.to_sym] = "#{@keyword_part} row #{row} field #{index}"
-        @add_values.push("new #{@keyword_part}")
+        @values.push("new #{@keyword_part}")
 
         if (row == 0 and index == 0)
           @keyword_complete = row_data[value.to_sym]
@@ -98,8 +92,8 @@ shared_examples 'shared_feature_list' do |path|
     describe 'add a row' do
       it 'row count should plus 1' do
         find('a[ng-click="edit({});"]').click
-        @add_fields.each_with_index do |field, i|
-          find("input[id=\"#{@add_fields[i]}\"]").set @add_values[i]
+        @columns.each_with_index do |field, i|
+          find("input[id=\"#{@columns[i]}\"]").set @values[i]
         end
         find('a[ng-click="save();"]').click
         sleep 0.1
@@ -113,8 +107,8 @@ shared_examples 'shared_feature_list' do |path|
         btn_add = find('a[ng-click="edit({});"]')
         @data.each_with_index do |row, i|
           btn_add.click
-          @add_fields.each_with_index do |field, i|
-            find("input[id=\"#{@add_fields[i]}\"]").set row[@add_fields[i].to_sym] + "copy"
+          @columns.each_with_index do |field, i|
+            find("input[id=\"#{@columns[i]}\"]").set row[@columns[i].to_sym] + "copy"
           end
           find('a[ng-click="save();"]').click
           sleep 1
@@ -129,15 +123,15 @@ shared_examples 'shared_feature_list' do |path|
   context 'edit' do
     describe 'edit a row' do
       it "field should be edited" do
-        find(:xpath, "//table/tbody/tr/td[text()='#{@data[0][@add_fields[0].to_sym]}']/../td[@class='text-center']/a[@ng-click='edit(item);']").click
-        @add_fields.each { |value|
+        find(:xpath, "//table/tbody/tr/td[text()='#{@data[0][@columns[0].to_sym]}']/../td[@class='text-center']/a[@ng-click='edit(item);']").click
+        @columns.each { |value|
           find("input[id=\"#{value}\"]").set @data[0][value.to_sym].reverse
         }
         find('a[ng-click="save();"]').click
         sleep 0.1
 
-        # expect(page).to_not have_content @data[0][@add_fields[0].to_sym]
-        expect(page).to have_content @data[0][@add_fields[0].to_sym].reverse
+        # expect(page).to_not have_content @data[0][@columns[0].to_sym]
+        expect(page).to have_content @data[0][@columns[0].to_sym].reverse
       end
     end
   end
@@ -155,11 +149,11 @@ shared_examples 'shared_feature_list' do |path|
 
     describe 'delete a specified row' do
       it "shouldn't exists after deleting" do
-        find(:xpath, "//table/tbody/tr/td[text()='#{@data[0][@add_fields[0].to_sym]}']/../td[@class='text-center']/a[@ng-click='delConfirm(item);']").click
+        find(:xpath, "//table/tbody/tr/td[text()='#{@data[0][@columns[0].to_sym]}']/../td[@class='text-center']/a[@ng-click='delConfirm(item);']").click
         find('a[ng-click="del();"]').click
         sleep 0.1
 
-        expect(page).to_not have_content @data[0][@add_fields[0].to_sym]
+        expect(page).to_not have_content @data[0][@columns[0].to_sym]
       end
     end
 
