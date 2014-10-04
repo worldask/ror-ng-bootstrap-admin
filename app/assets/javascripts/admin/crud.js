@@ -82,7 +82,7 @@ app.factory('crud', ['$http', '$compile', '$animate', '$q', 'validation', functi
                 Util.notify(response.desc);
                 scope.showList();
               } else {
-                Util.notify(split_error_message(response.desc), 'error');
+                process_error(response);
               }
             };
             break;
@@ -99,7 +99,7 @@ app.factory('crud', ['$http', '$compile', '$animate', '$q', 'validation', functi
               Util.notify(response.desc);
               scope.showList();
             } else {
-              Util.notify(split_error_message(response.desc), 'error');
+              process_error(response);
             }
           };
           break;
@@ -326,13 +326,37 @@ app.factory('crud', ['$http', '$compile', '$animate', '$q', 'validation', functi
         element.find('#panel-edit').removeClass('hidden').addClass('show');
       };
 
-      var split_error_message = function(message) {
-        var result = '';
+      var process_error = function(response) {
+        var result = '',
+            message = response.desc,
+            array = [],
+            temp = {},
+            control,
+            controlName;
 
         if (angular.isDefined(message)) {
-          angular.forEach(message, function(value, index) {
-            result += index + ' ' + value;
-          });
+          for (var key in message) {
+            if (message.hasOwnProperty(key)) {
+              control = element.find('#panel-edit #' + key);
+              if (control) {
+                // english 
+                // result += index + ' ' + message[key];
+
+                // chinese
+                controlName = control.attr("placeholder");
+                if (angular.isDefined(controlName) && controlName != '') {
+                  //if (message[key][0] === 'has already been taken') {
+                  if (response.code === -2) {
+                    Util.notify(controlName + "值重复", 'error');
+                  }
+                }
+                control.parent().addClass("has-error");
+                control.focus();
+                control.select();
+                break;
+              }
+            }
+          }
         }
 
         return result;
@@ -340,4 +364,3 @@ app.factory('crud', ['$http', '$compile', '$animate', '$q', 'validation', functi
     }
   };
 }]);
-
