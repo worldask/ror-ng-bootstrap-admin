@@ -89,6 +89,20 @@ shared_examples 'shared_feature_list' do |path|
       end
     end
 
+    describe 'add a row validating unique fields' do
+      it 'reqired textbox should be with error style' do
+        find('a[ng-click="edit({});"]').click
+        # add row same as first row
+        @columns.each_with_index do |field, i|
+          find("input[id=\"#{@columns[i]}\"]").set "#{@keyword_part} 0_#{i}"
+        end 
+        find('a[ng-click="save();"]').click
+        sleep 0.1
+
+        expect(page).to have_selector('#editForm .has-error')
+      end
+    end
+
     describe 'add a row' do
       it 'row count should plus 1' do
         find('a[ng-click="edit({});"]').click
