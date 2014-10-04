@@ -345,9 +345,8 @@ app.factory('crud', ['$http', '$compile', '$animate', '$q', 'validation', functi
                 // chinese
                 controlName = control.attr("placeholder");
                 if (angular.isDefined(controlName) && controlName != '') {
-                  //if (message[key][0] === 'has already been taken') {
                   if (response.code === -2) {
-                    Util.notify(controlName + "值重复", 'error');
+                    Util.notify(controlName + message[key], 'error');
                   }
                 }
                 control.parent().addClass("has-error");

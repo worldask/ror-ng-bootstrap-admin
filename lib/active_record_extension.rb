@@ -40,7 +40,8 @@ module ActiveRecordExtension
         @item.save
         {code: 1, desc: '保存成功！', id: @item.id}
       else
-        {code: error_code(@item.errors), desc: @item.errors.messages}
+        code, column, desc = error_reulst(@item.errors)
+        {code: code, desc: {column.to_sym => desc}}
       end
 
       # search_field = this->search_field
@@ -57,7 +58,8 @@ module ActiveRecordExtension
         @item.save
         {code: 1, desc: '保存成功！', id: @item.id}
       else
-        {code: error_code(@item.errors), desc: @item.errors.messages}
+        code, column, desc = error_reulst(@item.errors)
+        {code: code, desc: {column.to_sym => desc}}
       end
       # $search_field = $this->search_field;
       # AdminLog::write(Auth::user()->username, $this->title . '编辑' . $this->search_field . '=' . $item->$search_field, Request::getClientIp(), date('Y-m-d H:i:s', time()));
@@ -88,16 +90,19 @@ module ActiveRecordExtension
         result
       end
 
-      def error_code(errors)
-        code = -1
-
+      def error_reulst(errors)
         errors.messages.each { |key, message|
-          if (message[0] == 'has already been taken')
-            code = -2
+          case message[0]
+          when 'has already been taken'
+            return -2, key, '值重复'
+          when "can't be blank"
+            return -3, key, '不能为空'
+          when 'is not a number'
+            return -4, key, '必须是数字'
+          else
+            return -1, key, '未知错误'
           end
         }
-
-        code
       end
   end
 end
