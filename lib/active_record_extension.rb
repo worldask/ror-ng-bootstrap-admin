@@ -7,22 +7,23 @@ module ActiveRecordExtension
     def list(params)
       data = {}
       page = params[:page] == nil ? 1 : params[:page]
+      per_page = Kaminari.config.default_per_page
 
       if (params[:keyword].nil?) 
         count = self.where(is_deleted: 0).count
-        data[:list] = {:data => self.where(is_deleted: 0).order(id: :desc).page(params[:page]).per(4)}
+        data[:list] = {:data => self.where(is_deleted: 0).order(id: :desc).page(params[:page]).per(per_page)}
       else 
         search_result = resolve_search_fields(self.search_fields, params[:keyword])
         count = self.where(is_deleted: 0).where(search_result[:where], search_result[:params]).count
-        data[:list] = {:data => self.where(is_deleted: 0).where(search_result[:where], search_result[:params]).order(id: :desc).page(params[:page]).per(4)}
+        data[:list] = {:data => self.where(is_deleted: 0).where(search_result[:where], search_result[:params]).order(id: :desc).page(params[:page]).per(per_page)}
         data[:list][:keyword] = params[:keyword]
       end 
 
       # paginator
       data[:list][:count] = count
       data[:list][:page] = page
-      data[:list][:per_page] = 4
-      data[:list][:last_page] = (count / 4.to_f).ceil
+      data[:list][:per_page] = per_page
+      data[:list][:last_page] = (count / per_page.to_f).ceil
       #data[:per_page] = Kaminari.config.default_per_page
       #data[:page_count] = (count / Kaminari.config.default_per_page.to_f).ceil
 
