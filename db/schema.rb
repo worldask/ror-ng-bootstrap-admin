@@ -11,10 +11,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140911092147) do
+ActiveRecord::Schema.define(version: 20141004162249) do
 
   create_table "admin_depts", force: true do |t|
     t.string   "name"
+    t.integer  "is_deleted", default: 0
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "admin_modules", force: true do |t|
+    t.string   "title"
+    t.string   "controller"
+    t.string   "method"
+    t.integer  "parent_id"
+    t.integer  "level"
+    t.integer  "sorting_no", default: 0
     t.integer  "is_deleted", default: 0
     t.datetime "created_at"
     t.datetime "updated_at"
