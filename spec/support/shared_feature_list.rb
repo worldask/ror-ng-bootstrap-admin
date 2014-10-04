@@ -6,29 +6,46 @@
 #  describe AdminXyz
 #    context 'search' do
 #      it_behaves_like 'shared_feature_list', '/admin/xyzs' do
-#        let(:hash_array)               { @xyzs }          # hash array for creating model
-#        let(:keyword_part)             { 'part-of-word' } # partial keyword
-#        let(:keyword_complete)         { 'whole-word' }   # complete keyword, row count should be 1
 #      end
 #    end
 #  end
 
 shared_examples 'shared_feature_list' do |path|
-  let(:hash_array)               { @data }
-  let(:keyword_part)             { @keyword_part }
-  let(:keyword_complete)         { @row1[@field1.to_sym] }
-  let(:add_field)                { [@field1] }
-  let(:add_value)                { ["new #{@keyword_part}"] }
+  before(:all) do
+    @data = []
+    @add_values = []
+    @keyword_complete = ''
+  end
 
   before(:each) do
-    described_class.create! hash_array
+    @data = []
+    @add_values = []
+
+    # generate rows
+    2.times { |row|
+      row_data = {}
+
+      # iterate each fields
+      @add_fields.each_with_index { |value, index|
+        row_data[value.to_sym] = "#{@keyword_part} row #{row} field #{index}"
+        @add_values.push("new #{@keyword_part}")
+
+        if (row == 0 and index == 0)
+          @keyword_complete = row_data[value.to_sym]
+        end
+      }
+
+      @data.push(row_data)
+    }
+
+    described_class.create! @data
     visit path
   end
 
   context 'search' do
-    describe 'search <keyword_complete>' do
+    describe 'search <@keyword_complete>' do
       it 'row count should be 1' do
-        find(:xpath, "//input[@name='q']").set keyword_complete
+        find(:xpath, "//input[@name='q']").set @keyword_complete
         find(:xpath, "//a[@ng-click='search(list.keyword);']").click
         sleep 0.1
 
@@ -46,23 +63,23 @@ shared_examples 'shared_feature_list' do |path|
       end
     end
 
-    describe 'search <keyword_part>' do
-      it 'row count should be <hash_array.length>' do
-        find(:xpath, "//input[@name='q']").set keyword_part
+    describe 'search <@keyword_part>' do
+      it 'row count should be <@data.length>' do
+        find(:xpath, "//input[@name='q']").set @keyword_part
         find(:xpath, "//a[@ng-click='search(list.keyword);']").click
         sleep 0.1
 
-        expect(page).to have_selector('table tbody tr', count: hash_array.length)
+        expect(page).to have_selector('table tbody tr', count: @data.length)
       end
     end
 
     #describe 'search empty string' do
-    #  it 'row count should be <hash_array.length>' do
+    #  it 'row count should be <@data.length>' do
     #    find(:xpath, "//input[@name='q']").set ''
     #    find(:xpath, "//a[@ng-click='search(list.keyword);']").click
     #    sleep 0.1
 
-    #    expect(page).to have_selector('table tbody tr', count: hash_array.length)
+    #    expect(page).to have_selector('table tbody tr', count: @data.length)
     #  end
     #end
   end
@@ -81,8 +98,8 @@ shared_examples 'shared_feature_list' do |path|
     describe 'add a row' do
       it 'row count should plus 1' do
         find('a[ng-click="edit({});"]').click
-        add_field.each_with_index do |field, i|
-          find("input[id=\"#{add_field[i]}\"]").set add_value[i]
+        @add_fields.each_with_index do |field, i|
+          find("input[id=\"#{@add_fields[i]}\"]").set @add_values[i]
         end
         find('a[ng-click="save();"]').click
         sleep 0.1
@@ -96,8 +113,8 @@ shared_examples 'shared_feature_list' do |path|
         btn_add = find('a[ng-click="edit({});"]')
         @data.each_with_index do |row, i|
           btn_add.click
-          add_field.each_with_index do |field, i|
-            find("input[id=\"#{add_field[i]}\"]").set row[add_field[i].to_sym] + "copy"
+          @add_fields.each_with_index do |field, i|
+            find("input[id=\"#{@add_fields[i]}\"]").set row[@add_fields[i].to_sym] + "copy"
           end
           find('a[ng-click="save();"]').click
           sleep 1
@@ -112,12 +129,15 @@ shared_examples 'shared_feature_list' do |path|
   context 'edit' do
     describe 'edit a row' do
       it "field should be edited" do
-        find(:xpath, "//table/tbody/tr/td[text()='#{@row1[@field1.to_sym]}']/../td[@class='text-center']/a[@ng-click='edit(item);']").click
-        find("input[id=\"#{@field1.to_sym}\"]").set @row1[@field1.to_sym].reverse
+        find(:xpath, "//table/tbody/tr/td[text()='#{@data[0][@add_fields[0].to_sym]}']/../td[@class='text-center']/a[@ng-click='edit(item);']").click
+        @add_fields.each { |value|
+          find("input[id=\"#{value}\"]").set @data[0][value.to_sym].reverse
+        }
         find('a[ng-click="save();"]').click
         sleep 0.1
 
-        expect(page).to_not have_content @row1[@field1.to_sym]
+        # expect(page).to_not have_content @data[0][@add_fields[0].to_sym]
+        expect(page).to have_content @data[0][@add_fields[0].to_sym].reverse
       end
     end
   end
@@ -135,11 +155,11 @@ shared_examples 'shared_feature_list' do |path|
 
     describe 'delete a specified row' do
       it "shouldn't exists after deleting" do
-        find(:xpath, "//table/tbody/tr/td[text()='#{@row1[@field1.to_sym]}']/../td[@class='text-center']/a[@ng-click='delConfirm(item);']").click
+        find(:xpath, "//table/tbody/tr/td[text()='#{@data[0][@add_fields[0].to_sym]}']/../td[@class='text-center']/a[@ng-click='delConfirm(item);']").click
         find('a[ng-click="del();"]').click
         sleep 0.1
 
-        expect(page).to_not have_content @row1[@field1.to_sym]
+        expect(page).to_not have_content @data[0][@add_fields[0].to_sym]
       end
     end
 
