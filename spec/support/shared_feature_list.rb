@@ -16,21 +16,19 @@ shared_examples 'shared_feature_list' do |path|
     @values = []
 
     # generate rows
-    Kaminari.config.default_per_page.times { |row|
+    Kaminari.config.default_per_page.times do |row|
       row_data = {}
 
       # iterate each fields
-      @columns.each_with_index { |value, index|
+      @columns.each_with_index do |value, index|
         row_data[value.to_sym] = "#{@keyword_part} #{row}_#{index}"
         @values.push("new #{@keyword_part}")
 
-        if (row == 0 and index == 0)
-          @keyword_complete = row_data[value.to_sym]
-        end
-      }
+        @keyword_complete = row_data[value.to_sym] if row == 0 and index == 0
+      end 
 
       @data.push(row_data)
-    }
+    end
 
     described_class.create! @data
     visit path
@@ -93,9 +91,7 @@ shared_examples 'shared_feature_list' do |path|
       it 'reqired textbox should be with error style' do
         find('a[ng-click="edit({});"]').click
         # add row same as first row
-        @columns.each_with_index do |field, i|
-          find("input[id=\"#{@columns[i]}\"]").set "#{@keyword_part} 0_#{i}"
-        end 
+        @columns.each_with_index { |field, i| find("input[id=\"#{@columns[i]}\"]").set "#{@keyword_part} 0_#{i}" }
         find('a[ng-click="save();"]').click
         sleep 0.1
 
@@ -106,9 +102,7 @@ shared_examples 'shared_feature_list' do |path|
     describe 'add a row' do
       it 'row count should plus 1' do
         find('a[ng-click="edit({});"]').click
-        @columns.each_with_index do |field, i|
-          find("input[id=\"#{@columns[i]}\"]").set @values[i]
-        end
+        @columns.each_with_index { |field, i| find("input[id=\"#{@columns[i]}\"]").set @values[i] }
         find('a[ng-click="save();"]').click
         sleep 0.1
 
@@ -121,14 +115,10 @@ shared_examples 'shared_feature_list' do |path|
         btn_add = find('a[ng-click="edit({});"]')
         @data.each_with_index do |row, i|
           # add 3 rows
-          if (i > 2) 
-            break
-          end
+          break if i > 2
 
           btn_add.click
-          @columns.each_with_index do |field, i|
-            find("input[id=\"#{@columns[i]}\"]").set row[@columns[i].to_sym] + " copy"
-          end
+          @columns.each_with_index { |field, i| find("input[id=\"#{@columns[i]}\"]").set row[@columns[i].to_sym] + " copy" }
           find('a[ng-click="save();"]').click
           sleep 0.1
         end
@@ -142,9 +132,7 @@ shared_examples 'shared_feature_list' do |path|
     describe 'edit a row' do
       it "field should be edited" do
         find(:xpath, "//table/tbody/tr/td[text()='#{@data[0][@columns[0].to_sym]}']/../td[@class='text-center']/a[@ng-click='edit(item);']").click
-        @columns.each { |value|
-          find("input[id=\"#{value}\"]").set @data[0][value.to_sym].reverse
-        }
+        @columns.each { |value| find("input[id=\"#{value}\"]").set @data[0][value.to_sym].reverse }
         find('a[ng-click="save();"]').click
         sleep 0.1
 

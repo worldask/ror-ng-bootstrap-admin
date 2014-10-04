@@ -9,13 +9,13 @@ module ActiveRecordExtension
       page = params[:page] == nil ? 1 : params[:page]
       per_page = Kaminari.config.default_per_page
 
-      if (params[:keyword].nil?) 
+      if params[:keyword].nil?
         count = self.where(is_deleted: 0).count
-        data[:list] = {:data => self.where(is_deleted: 0).order(id: :desc).page(params[:page]).per(per_page)}
+        data[:list] = {data: self.where(is_deleted: 0).order(id: :desc).page(params[:page]).per(per_page)}
       else 
         search_result = resolve_search_fields(self.search_fields, params[:keyword])
         count = self.where(is_deleted: 0).where(search_result[:where], search_result[:params]).count
-        data[:list] = {:data => self.where(is_deleted: 0).where(search_result[:where], search_result[:params]).order(id: :desc).page(params[:page]).per(per_page)}
+        data[:list] = {data: self.where(is_deleted: 0).where(search_result[:where], search_result[:params]).order(id: :desc).page(params[:page]).per(per_page)}
         data[:list][:keyword] = params[:keyword]
       end 
 
@@ -33,10 +33,8 @@ module ActiveRecordExtension
     def create(params)
       @item = self.new
 
-      params[self.model_name.singular].each {|k, v|
-        @item[k] = v
-      }
-      if (@item.valid?) 
+      params[self.model_name.singular].each { |k, v| @item[k] = v }
+      if @item.valid?
         @item.save
         {code: 1, desc: '保存成功！', id: @item.id}
       else
@@ -51,10 +49,8 @@ module ActiveRecordExtension
     def update(params)
       @item = self::find(params[:id])
 
-      params[self.model_name.singular].each {|k, v|
-        @item[k] = v
-      }
-      if (@item.valid?) 
+      params[self.model_name.singular].each { |k, v| @item[k] = v }
+      if @item.valid?
         @item.save
         {code: 1, desc: '保存成功！', id: @item.id}
       else
@@ -67,31 +63,31 @@ module ActiveRecordExtension
 
     def destroy(params) 
       @item = self::find(params[:id])
-      @item.update(:is_deleted => 1)
+      @item.update(is_deleted: 1)
 
       {code: 1, desc: '删除成功！'}
     end
 
     def bulk_delete(params)
-      self.where(:id => params[:ids]).update_all(:is_deleted => 1)
+      self.where(id: params[:ids]).update_all(is_deleted: 1)
 
       {code: 1, desc: '删除成功！'}
     end
 
     private
       def resolve_search_fields(fields, keyword)
-        result = {:where => '', :params => {}}
+        result = {where: '', params: {}}
 
-        fields.each{|f|
+        fields.each do |f|
           result[:where].empty? ? result[:where] += "#{f} like :#{f}" : result[:where] += " or #{f} like :#{f}"
           result[:params][f.to_sym] = "%#{keyword}%"
-        }
+        end
 
         result
       end
 
       def error_reulst(errors)
-        errors.messages.each { |key, message|
+        errors.messages.each do |key, message|
           case message[0]
           when 'has already been taken'
             return -2, key, '值重复'
@@ -102,7 +98,7 @@ module ActiveRecordExtension
           else
             return -1, key, '未知错误'
           end
-        }
+        end 
       end
   end
 end

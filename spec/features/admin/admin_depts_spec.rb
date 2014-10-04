@@ -1,7 +1,7 @@
 # coding: utf-8
 require 'rails_helper'
 
-feature AdminDept, :type => :feature, :js => true do
+feature AdminDept, type: :feature, js: true do
   before(:all) do
     @keyword_part = 'user'
     @columns = ['name']
