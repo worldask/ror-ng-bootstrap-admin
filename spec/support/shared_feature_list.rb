@@ -16,12 +16,12 @@ shared_examples 'shared_feature_list' do |path|
     @values = []
 
     # generate rows
-    2.times { |row|
+    Kaminari.config.default_per_page.times { |row|
       row_data = {}
 
       # iterate each fields
       @columns.each_with_index { |value, index|
-        row_data[value.to_sym] = "#{@keyword_part} row #{row} field #{index}"
+        row_data[value.to_sym] = "#{@keyword_part} #{row}_#{index}"
         @values.push("new #{@keyword_part}")
 
         if (row == 0 and index == 0)
@@ -106,16 +106,20 @@ shared_examples 'shared_feature_list' do |path|
       it 'row count should be corresponding' do
         btn_add = find('a[ng-click="edit({});"]')
         @data.each_with_index do |row, i|
+          # add 3 rows
+          if (i > 2) 
+            break
+          end
+
           btn_add.click
           @columns.each_with_index do |field, i|
-            find("input[id=\"#{@columns[i]}\"]").set row[@columns[i].to_sym] + "copy"
+            find("input[id=\"#{@columns[i]}\"]").set row[@columns[i].to_sym] + " copy"
           end
           find('a[ng-click="save();"]').click
-          sleep 1
+          sleep 0.1
         end
 
-        visit path 
-        expect(page).to have_selector('table tbody tr', count: @data.length * 2)
+        expect(page).to have_selector('table tbody tr', count: @data.length + 3)
       end
     end
   end
@@ -130,7 +134,6 @@ shared_examples 'shared_feature_list' do |path|
         find('a[ng-click="save();"]').click
         sleep 0.1
 
-        # expect(page).to_not have_content @data[0][@columns[0].to_sym]
         expect(page).to have_content @data[0][@columns[0].to_sym].reverse
       end
     end
@@ -142,7 +145,7 @@ shared_examples 'shared_feature_list' do |path|
         all('a[ng-click="delConfirm(item);"]').first.click
         find('a[ng-click="del();"]').click
         sleep 0.1
-        visit path 
+
         expect(page).to have_selector('table tbody tr', count: @data.length - 1)
       end
     end 
