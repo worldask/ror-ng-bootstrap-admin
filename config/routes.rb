@@ -23,6 +23,7 @@ Rails.application.routes.draw do
       delete 'bulk_delete', on: :collection
     end
 
+    resources :modules, :controller => 'admin_modules', concerns: [:list, :bulk_delete]
     resources :users, :controller => 'admin_users', concerns: [:list, :bulk_delete]
     resources :depts, :controller => 'admin_depts', concerns: [:list, :bulk_delete]
     resources :roles, :controller => 'admin_roles', concerns: [:list, :bulk_delete]
