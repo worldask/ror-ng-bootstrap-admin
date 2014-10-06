@@ -1,0 +1,36 @@
+- content_for :list_toolbar do
+  = render "admin/shared/toolbar_normal"
+
+- content_for :list_thead do
+  %th.text-center 标题
+  %th.text-center 路由
+  
+- content_for :list_tbody do
+  %td{"ng-bind" => "item.title"}
+  %td{"ng-bind" => "item.controller + '/' + item.method"}
+
+- content_for :list_buttons do
+  = render "admin/shared/btn_edit"
+  = render "admin/shared/btn_delete"
+
+- content_for :edit_form_controls do
+  .form-group
+    %label.col-md-2.control-label{:for => "title"} 标题
+    .col-md-10
+      %input#title.form-control{"ng-model" => "itemModel.title", :type => "text", :placeholder => "标题", :maxlength => "20", :required => true, :unique => true}
+  .form-group
+    %label.col-md-2.control-label{:for => "controller"} 控制器
+    .col-md-10
+      %input#controller.form-control{"ng-model" => "itemModel.controller", :type => "text", :placeholder => "控制器", :maxlength => "20", :required => true}
+  .form-group
+    %label.col-md-2.control-label{:for => "method"} 方法
+    .col-md-10
+      %input#method.form-control{"ng-model" => "itemModel.method", :type => "text", :placeholder => "方法", :maxlength => "20"}
+  .form-group
+    %label.col-md-2.control-label{:for => "parent_id"} 父ID
+    .col-md-10
+      %input#parent_id.form-control{"ng-model" => "itemModel.parent_id", :type => "text", :placeholder => "父ID", :maxlength => "20", :numeric => true}
+  .form-group
+    %label.col-md-2.control-label{:for => "level"} 层级
+    .col-md-10
+      %input#level.form-control{"ng-model" => "itemModel.level", :type => "text", :placeholder => "层级", :maxlength => "20", :numeric => true}
