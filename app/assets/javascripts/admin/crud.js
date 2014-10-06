@@ -345,7 +345,7 @@ app.factory('crud', ['$http', '$compile', '$animate', '$q', 'validation', functi
                 // chinese
                 controlName = control.attr("placeholder");
                 if (angular.isDefined(controlName) && controlName != '') {
-                  if (response.code === -2) {
+                  if (response.code < 0) {
                     Util.notify(controlName + message[key], 'error');
                   }
                 }
