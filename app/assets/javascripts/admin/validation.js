@@ -55,7 +55,7 @@ app.factory('validation', [function() {
           control = $(controls[i]);
           value = control.val().trim();
 
-          if (isNaN(value)) {
+          if (isNaN(parseFloat(value))) {
             setStyle(control);
             controls[i].select();
             controlName = control.attr("placeholder");
