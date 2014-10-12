@@ -119,6 +119,8 @@ app.factory('list', ['$compile', 'crud', function($compile, crud) {
         if (angular.isDefined(keyword) && keyword !== null && keyword !== '') {
           scope.read(Util.getController(), 'list', '?keyword=' + keyword);
         } 
+        $element.find('[name="q"]').focus();
+        $element.find('[name="q"]').select();
       };
 
       // init 
