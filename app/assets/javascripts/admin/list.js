@@ -86,6 +86,9 @@ app.factory('list', ['$compile', 'crud', function($compile, crud) {
       // after deleted
       scope.afterDeleted.push(function(item) {
         // console.info("after deleted");
+
+          // re-paging
+          scope.paginator.count--; 
       });
       
       // close edit panel
