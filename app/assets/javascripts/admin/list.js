@@ -18,9 +18,6 @@ app.factory('list', ['$compile', 'crud', function($compile, crud) {
       scope.afterRead.push(function(response) {
         // console.info("after read");
 
-        scope.flagAfterItemCreated = true;
-        scope.flagAfterItemUpdated = true;
-
         scope.primaryKey = response.primaryKey;
         if (scope.primaryKey == undefined) {
           scope.primaryKey = 'id';
@@ -46,12 +43,20 @@ app.factory('list', ['$compile', 'crud', function($compile, crud) {
         // console.info("after created");
 
         if (scope.list !== undefined) {
+          // add to list
           scope.list.data.unshift(item);
+
+          // pop last one if oversize
+          if (scope.list.data.length > scope.paginator.perPage) {
+            scope.list.data.pop();
+          }
+
+          // re-paging
+          scope.paginator.count++; 
+          scope.paginator.page = 1;
+          scope.paginator.lastPage = Math.ceil(scope.paginator.count / scope.paginator.perPage);
         }
 
-        if (!angular.isUndefined(scope.relation) && scope.flagAfterItemCreated) {
-          //scope.init();
-        }
         scope.closeEdit();
       });
 
@@ -69,9 +74,6 @@ app.factory('list', ['$compile', 'crud', function($compile, crud) {
           scope.editingItem[key] = scope.itemModel[key];
         }
         
-        if (!angular.isUndefined(scope.relation) && scope.flagAfterItemUpdated) {
-          //scope.init();
-        }
         scope.closeEdit();
       });
 
