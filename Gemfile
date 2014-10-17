@@ -20,7 +20,6 @@ gem 'json'
 
 # Use ActiveModel has_secure_password
 gem 'bcrypt'
-gem 'geo_pattern'
 
 # Use unicorn as the app server
 gem 'unicorn'

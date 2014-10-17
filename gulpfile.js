@@ -10,6 +10,7 @@ var gulp = require('gulp'),
     concat = require('gulp-concat');
 
 var paths = {
+  bower: 'vendor/assets/bower_components',
   js: 'app/assets/javascripts/*.js',
   scss: 'app/assets/stylesheets/*.scss',
   css: 'app/assets/stylesheets/*.css',
@@ -28,19 +29,19 @@ gulp.task('clean', function(cb) {
 
 gulp.task('vendor_js', function () {
   var files = [
-    'vendor/assets/bower_components/jquery/dist/jquery.min.js',
-    'vendor/assets/bower_components/angular/angular.min.js',
-    'vendor/assets/bower_components/angular-animate/angular-animate.min.js',
-    'vendor/assets/bower_components/angular-route/angular-route.min.js',
-    'vendor/assets/bower_components/bootstrap/dist/js/bootstrap.min.js',
-    //'vendor/assets/bower_components/bootstrap-datepicker-n9/js/bootstrap-datepicker.js',
-    //'vendor/assets/bower_components/bootstrap-datepicker-n9/js/locales/bootstrap-datepicker.zh-CN.js',
-    //'vendor/assets/bower_components/angular-bootstrap-nav-tree/dist/abn_tree_directive.js',
-    'vendor/assets/bower_components/spinjs/spin.js',
-    'vendor/assets/bower_components/iOS-Overlay/js/iosOverlay.js',
-    'vendor/assets/bower_components/noty/js/noty/jquery.noty.js',
-    'vendor/assets/bower_components/noty/js/noty/layouts/bottomRight.js',
-    'vendor/assets/bower_components/noty/js/noty/themes/default.js',
+    paths.bower + '/jquery/dist/jquery.min.js',
+    paths.bower + '/angular/angular.min.js',
+    paths.bower + '/angular-animate/angular-animate.min.js',
+    paths.bower + '/angular-route/angular-route.min.js',
+    paths.bower + '/bootstrap/dist/js/bootstrap.min.js',
+    //paths.bower + '/bootstrap-datepicker-n9/js/bootstrap-datepicker.js',
+    //paths.bower + '/bootstrap-datepicker-n9/js/locales/bootstrap-datepicker.zh-CN.js',
+    //paths.bower + '/angular-bootstrap-nav-tree/dist/abn_tree_directive.js',
+    paths.bower + '/spinjs/spin.js',
+    paths.bower + '/iOS-Overlay/js/iosOverlay.js',
+    paths.bower + '/noty/js/noty/jquery.noty.js',
+    paths.bower + '/noty/js/noty/layouts/bottomRight.js',
+    paths.bower + '/noty/js/noty/themes/default.js'
   ];
 
   return gulp.src(files)
@@ -52,11 +53,11 @@ gulp.task('vendor_js', function () {
 
 gulp.task('vendor_css', function () {
   var files = [
-    'vendor/assets/bower_components/font-awesome/css/font-awesome.min.css',
-    'vendor/assets/bower_components/bootstrap/dist/css/bootstrap.min.css',
-    //'vendor/assets/bower_components/bootstrap-datepicker-n9/css/datepicker3.css',
-    //'vendor/assets/bower_components/angular-bootstrap-nav-tree/dist/abn_tree.css',
-    'vendor/assets/bower_components/iOS-Overlay/css/iosOverlay.css',
+    paths.bower + '/font-awesome/css/font-awesome.min.css',
+    paths.bower + '/bootstrap/dist/css/bootstrap.min.css',
+    //paths.bower + '/bootstrap-datepicker-n9/css/datepicker3.css',
+    //paths.bower + '/angular-bootstrap-nav-tree/dist/abn_tree.css',
+    paths.bower + '/iOS-Overlay/css/iosOverlay.css'
   ];
 
   return gulp.src(files)
@@ -68,10 +69,10 @@ gulp.task('vendor_css', function () {
 
 gulp.task('vendor_fonts', function () {
   var files = [
-    'vendor/assets/bower_components/font-awesome/fonts/fontawesome-webfont.eot',
-    'vendor/assets/bower_components/font-awesome/fonts/fontawesome-webfont.woff',
-    'vendor/assets/bower_components/font-awesome/fonts/fontawesome-webfont.ttf',
-    'vendor/assets/bower_components/font-awesome/fonts/fontawesome-webfont.svg'
+    paths.bower + '/font-awesome/fonts/fontawesome-webfont.eot',
+    paths.bower + '/font-awesome/fonts/fontawesome-webfont.woff',
+    paths.bower + '/font-awesome/fonts/fontawesome-webfont.ttf',
+    paths.bower + '/font-awesome/fonts/fontawesome-webfont.svg'
   ];
 
   return gulp.src(files)
@@ -131,7 +132,8 @@ gulp.task('js_admin', function () {
     '!app/assets/javascripts/admin/crud.js',
     '!app/assets/javascripts/admin/filters.js',
     '!app/assets/javascripts/admin/directives.js',
-    '!app/assets/javascripts/admin/util.js'
+    '!app/assets/javascripts/admin/util.js',
+    paths.bower + '/geopattern/js/geopattern.min.js',
   ];
 
   return gulp.src(files)

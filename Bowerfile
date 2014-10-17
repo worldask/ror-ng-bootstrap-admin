@@ -10,7 +10,7 @@ asset "noty"
 asset "spinjs"
 asset "iOS-Overlay"
 asset "modernizr"
+asset "geopattern"
 # asset "angular-bootstrap-nav-tree"
 #asset "bootstrap-datepicker-n9"
 # vim: ft=ruby
-

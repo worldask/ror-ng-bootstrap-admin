@@ -12,6 +12,7 @@
     "noty": "latest",
     "spinjs": "latest",
     "iOS-Overlay": "latest",
-    "modernizr": "latest"
+    "modernizr": "latest",
+    "geopattern": "latest"
   }
 }
