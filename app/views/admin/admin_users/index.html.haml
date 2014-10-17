@@ -18,7 +18,7 @@
     .form-group
       %label.col-md-2.control-label{:for => "username"} 名称
       .col-md-10
-        %input#username.form-control{"ng-model" => "itemModel.username", :type => "text", :placeholder => "名称", :maxlength => "20", :required => true, :unique => true}
+        %input#username.form-control{"ng-model" => "itemModel.username", :type => "text", :placeholder => "名称", :maxlength => "20", :required => true, :unique => true, "ng-keyup" => "repaintAvatar();"}
     .form-group
       %label.col-md-2.control-label{:for => "passowrd"} 密码 
       .col-md-10

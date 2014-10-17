@@ -4,11 +4,15 @@ app.controller('Admin::AdminUsersController', ['$scope', '$element', 'list', fun
 
   // after edit
   $scope.afterEdit.push(function() {
+    $scope.repaintAvatar();
+  });
+
+  $scope.repaintAvatar = function() {
     if (angular.isDefined($scope.itemModel)) {
       var pattern = GeoPattern.generate($scope.itemModel.username);
       $('#avatar').css('background-image', pattern.toDataUrl());
     }
-  });
+  }
 
   $scope.editMenu = function(item) {
     $(":checkbox[id^='treeCheckbox']").each(function(i) {
