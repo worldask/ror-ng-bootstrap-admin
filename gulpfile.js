@@ -34,6 +34,7 @@ gulp.task('vendor_js', function () {
     paths.bower + '/angular-animate/angular-animate.min.js',
     paths.bower + '/angular-route/angular-route.min.js',
     paths.bower + '/bootstrap/dist/js/bootstrap.min.js',
+    paths.bower + '/angular-ui-tree/dist/angular-ui-tree.min.js',
     //paths.bower + '/bootstrap-datepicker-n9/js/bootstrap-datepicker.js',
     //paths.bower + '/bootstrap-datepicker-n9/js/locales/bootstrap-datepicker.zh-CN.js',
     //paths.bower + '/angular-bootstrap-nav-tree/dist/abn_tree_directive.js',
@@ -57,7 +58,8 @@ gulp.task('vendor_css', function () {
     paths.bower + '/bootstrap/dist/css/bootstrap.min.css',
     //paths.bower + '/bootstrap-datepicker-n9/css/datepicker3.css',
     //paths.bower + '/angular-bootstrap-nav-tree/dist/abn_tree.css',
-    paths.bower + '/iOS-Overlay/css/iosOverlay.css'
+    paths.bower + '/iOS-Overlay/css/iosOverlay.css',
+    paths.bower + '/angular-ui-tree/dist/angular-ui-tree.min.css'
   ];
 
   return gulp.src(files)
