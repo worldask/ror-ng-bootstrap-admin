@@ -11,6 +11,8 @@ app.factory('crud', ['$http', '$compile', '$animate', '$q', 'validation', functi
 
       scope.beforeRead = [];
       scope.afterRead = [];
+      scope.beforeEdit = [];
+      scope.afterEdit = [];
       scope.beforeCreate = [];
       scope.afterCreated = [];
       scope.beforeUpdate = [];
@@ -146,6 +148,12 @@ app.factory('crud', ['$http', '$compile', '$animate', '$q', 'validation', functi
 
       // show edit panel
       scope.edit = function(item) {
+        var i;
+        
+        for (i = 0; i < scope.beforeEdit.length; i++) {
+          (scope.beforeEdit[i])();
+        }
+
         scope.editingItem = item;
         scope.itemModel = angular.copy(item);
 
@@ -158,6 +166,10 @@ app.factory('crud', ['$http', '$compile', '$animate', '$q', 'validation', functi
         //.then(function() {
         //  console.log('entered');
         //});
+        
+        for (i = 0; i < scope.afterEdit.length; i++) {
+          (scope.afterEdit[i])();
+        }
       };
 
       scope.save = function() {
