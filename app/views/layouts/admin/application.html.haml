@@ -40,10 +40,10 @@
     - else params[:action] == 'index' 
       %script{:src => "/assets/admin/list.js"}
 
+    = yield :scripts
     - if File.file?("./public/assets/#{params[:controller]}.js")
       %script{:src => "/assets/#{params[:controller]}.js"}
     - else
       - if params[:action] == 'index' 
         %script
           app.controller("#{params[:controller].camelize}Controller", ['$scope', '$element', 'list', function($scope, $element, list) {list.extend($scope, $element);}]);
-    = yield :scripts

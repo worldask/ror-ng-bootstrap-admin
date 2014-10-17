@@ -2,6 +2,14 @@
 app.controller('Admin::AdminUsersController', ['$scope', '$element', 'list', function($scope, $element, list) {
   list.extend($scope, $element);
 
+  // after edit
+  $scope.afterEdit.push(function() {
+    if (angular.isDefined($scope.itemModel)) {
+      var pattern = GeoPattern.generate($scope.itemModel.username);
+      $('#avatar').css('background-image', pattern.toDataUrl());
+    }
+  });
+
   $scope.editMenu = function(item) {
     $(":checkbox[id^='treeCheckbox']").each(function(i) {
       $(this)[0].checked = false;
