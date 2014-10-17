@@ -1,4 +1,4 @@
-%div{"ng-controller" => "#{params[:controller].camelize}Controller", "ng-init" => "init()"}
+%div{"ng-controller" => "#{params[:controller].camelize}Controller", "ng-init" => "init();"}
   #panel-list.show.panel.panel-default
     .panel-heading
       %h4
@@ -8,31 +8,7 @@
         -# 工具栏
         = yield :list_toolbar
 
-      %table.table.table-striped.table-hover.table-bordered.mt20
-        %thead
-          %tr
-            %th.text-center
-              %input#controllerName{:type => "hidden", :value => "{{controller}}"}
-              %input#primaryKey{:type => "hidden", :value => "{{primaryKey}}"}
-              %input{:type => "checkbox"}
-            -# 表头
-            = yield :list_thead
-            %th.text-center 操作
-        %tbody#list
-          %tr{"ng-repeat" => "item in list.data"}
-            %td{:width => "2%"}
-              %input{:type => "hidden", :value => "{{item.id}}"}
-              %input{:type => "checkbox", "ng-model" => "item.$$checked", "ng-change" => "onSelect(item)"}
-            -# 表体
-            = yield :list_tbody
-            %td.text-center
-              -# 操作按钮
-              = yield :list_buttons
-
-      %pagination{:read => 'read(c, m, params)', :count => "{{paginator.count}}", :page => "{{paginator.page}}", "per-page" => "{{paginator.perPage}}", "last-page" => "{{paginator.lastPage}}", :keyword => "{{list.keyword}}"}
-
-      .text-center{"ng-if" => "list.data.length == 0"}
-        %code 没有数据
+      = render "admin/shared/list"
 
   #panel-edit.hidden.panel.panel-primary{"auto-focus" => true}
     .modal-header.label-primary
